@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Option D: Khata Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F6F8; --surface:#FFFFFF; --primary:#1E3A8A; --secondary:#0E7490;
+  --success:#047857; --warning:#B45309; --danger:#B91C1C;
+  --text:#0F172A; --muted:#475569; --line:#DCE1E7;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#D9DEE4;font-family:'Noto Sans',sans-serif;color:var(--text);
+  display:flex;flex-direction:column;align-items:center;gap:14px;padding:18px 12px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.bar button{font:600 14px 'Noto Sans';padding:7px 12px;border-radius:8px;border:1px solid #94A3B8;background:#fff;color:var(--text);cursor:pointer}
+.bar button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.note{font-size:12px;color:var(--muted);max-width:360px;text-align:center}
+.phone{width:360px;height:740px;background:var(--bg);border-radius:24px;overflow:hidden;position:relative;box-shadow:0 12px 30px rgba(15,23,42,.2)}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--bg)}
+.screen.on{display:flex}
+svg{stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;width:20px;height:20px}
+.topbar{background:var(--primary);color:#fff;display:flex;align-items:center;gap:8px;padding:10px;height:58px;flex:none}
+.topbar .ib{width:40px;height:40px;border:0;background:transparent;color:#fff;display:grid;place-items:center;border-radius:8px;cursor:pointer;flex:none}
+.topbar .ib svg{width:22px;height:22px}
+.topbar .title{font-weight:600;font-size:17px;line-height:1.1}
+.topbar .title small{display:block;font-size:12px;opacity:.8;font-weight:400}
+.topbar .site{margin-left:auto;background:rgba(255,255,255,.14);border:0;color:#fff;padding:7px 10px;border-radius:8px;font:600 14px 'Noto Sans';display:flex;gap:4px;align-items:center;cursor:pointer;white-space:nowrap}
+.topbar .site svg{width:16px;height:16px}
+.scroll{flex:1;overflow-y:auto;padding:12px 12px 120px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi small{display:block;font-size:12px;color:var(--muted);font-weight:500}
+.kpi b{display:block;font-size:26px;font-variant-numeric:tabular-nums;margin-top:3px;font-weight:600}
+.kpi em{font-style:normal;font-size:12px;color:var(--muted)}
+.kpi.good b{color:var(--success)} .kpi.bad b{color:var(--danger)}
+.sect{display:flex;justify-content:space-between;align-items:center;margin:14px 2px 6px;font-size:14px;font-weight:600}
+.sect a{font-size:14px;color:var(--primary);font-weight:600;text-decoration:none}
+table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:14px}
+th{font-size:12px;color:var(--muted);font-weight:600;text-align:right;padding:8px 6px;border-bottom:2px solid var(--line);background:#F8FAFC}
+th:first-child,td:first-child{text-align:left}
+td{padding:10px 6px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+td .n{font-weight:600;display:block;text-align:left}
+td .s{font-size:12px;color:var(--muted);text-align:left;display:block}
+tr.click{cursor:pointer}
+tr.click:active td{background:#EEF2FF}
+.neg{color:var(--danger);font-weight:600}
+.pos{color:var(--success);font-weight:600}
+.syncbar{position:absolute;left:0;right:0;bottom:0;height:52px;background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px;padding:0 12px;font-size:12px;color:var(--muted)}
+.syncbar svg{color:var(--success);width:18px;height:18px}
+.fab{position:absolute;right:14px;bottom:66px;height:48px;padding:0 18px;border-radius:24px;border:0;background:var(--secondary);color:#fff;font:600 14px 'Noto Sans';display:flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(14,116,144,.35);cursor:pointer}
+.fab svg{width:18px;height:18px;stroke-width:2.2}
+/* Drawer */
+.drawer{position:absolute;inset:0;background:rgba(15,23,42,.45);display:none}
+.drawer.open{display:block}
+.drawer .panel{width:270px;height:100%;background:#fff;padding:14px 0;box-shadow:4px 0 16px rgba(0,0,0,.2)}
+.drawer .who{padding:6px 16px 14px;border-bottom:1px solid var(--line)}
+.drawer .who b{display:block;font-size:17px}
+.drawer .who small{font-size:12px;color:var(--muted)}
+.drawer a{display:flex;gap:12px;align-items:center;padding:12px 16px;color:var(--text);text-decoration:none;font-size:14px;font-weight:500;cursor:pointer}
+.drawer a.on{background:#EEF2FF;color:var(--primary);font-weight:600;box-shadow:inset 3px 0 0 var(--primary)}
+.drawer .sep{height:1px;background:var(--line);margin:8px 0}
+/* Attendance */
+.ctl{display:flex;gap:8px;margin-bottom:10px}
+.field{flex:1;background:#fff;border:1px solid #B8C2CE;border-radius:8px;height:40px;padding:0 10px;display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted)}
+.field svg{width:16px;height:16px;color:var(--muted)}
+.btn{height:40px;border-radius:8px;border:1px solid var(--primary);font:600 14px 'Noto Sans';padding:0 14px;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;background:#fff;color:var(--primary);white-space:nowrap}
+.btn.solid{background:var(--primary);color:#fff}
+.btn:disabled{opacity:.4}
+.btn svg{width:16px;height:16px}
+.chip{display:inline-block;font-size:12px;font-weight:700;padding:4px 7px;border-radius:6px;min-width:34px;text-align:center}
+.chip.p{background:#D1FAE5;color:#065F46}
+.chip.h{background:#FEF3C7;color:#92400E}
+.chip.a{background:#FEE2E2;color:#991B1B}
+.chip.n{background:#E2E8F0;color:#334155}
+.tbl-att td:nth-child(2){text-align:center}
+.tfoot td{font-weight:600;background:#F8FAFC;border-top:2px solid var(--line)}
+/* Voice / search */
+.search{background:#fff;border:1px solid #B8C2CE;border-radius:10px;height:44px;display:flex;align-items:center;gap:8px;padding:0 6px 0 12px;font-size:14px;margin:10px 12px 8px}
+.search svg{width:18px;height:18px;color:var(--muted);flex:none}
+.search .q{flex:1;color:var(--text)}
+.search .mic{width:34px;height:34px;border-radius:8px;border:0;background:transparent;color:var(--secondary);display:grid;place-items:center;cursor:pointer;flex:none}
+.search.listen{background:var(--secondary);border-color:var(--secondary);color:#fff}
+.search.listen svg{color:#fff}
+.search.listen .mic{background:#fff;color:var(--secondary)}
+.wave{display:flex;gap:3px;align-items:center;height:20px}
+.wave span{width:3px;height:6px;background:#fff;border-radius:2px;animation:w .9s infinite ease-in-out}
+.wave span:nth-child(2){animation-delay:.1s}.wave span:nth-child(3){animation-delay:.2s}.wave span:nth-child(4){animation-delay:.3s}.wave span:nth-child(5){animation-delay:.4s}
+@keyframes w{0%,100%{height:5px}50%{height:18px}}
+.hint{margin:0 12px 10px;font-size:12px;color:var(--muted)}
+.heard{margin:0 12px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.6}
+.heard small{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-bottom:2px}
+.heard mark{background:#E0F2FE;color:#0C4A6E;padding:0 3px;border-radius:3px;font-weight:600}
+.dim{opacity:.4;pointer-events:none;margin:0 12px}
+/* Form (confirm) */
+.dialog{position:absolute;left:10px;right:10px;top:70px;bottom:14px;background:#fff;border-radius:12px;box-shadow:0 10px 30px rgba(15,23,42,.25);display:flex;flex-direction:column;overflow:hidden}
+.dialog .dh{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.dialog .dh b{font-size:17px}
+.dialog .dh span{font-size:12px;color:var(--secondary);font-weight:700;display:flex;gap:4px;align-items:center}
+.dialog .dh span svg{width:14px;height:14px}
+.dialog .body{padding:14px 16px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.fl label{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-bottom:4px}
+.fl .in{height:40px;border:1px solid #B8C2CE;border-radius:8px;display:flex;align-items:center;padding:0 10px;font-size:14px;justify-content:space-between;font-variant-numeric:tabular-nums}
+.fl .in.v{border-color:var(--secondary);background:#F0FBFF}
+.fl .in i{font-style:normal;font-size:12px;font-weight:700;color:var(--secondary);display:flex;gap:4px;align-items:center}
+.fl .in i svg{width:12px;height:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.calc{background:#F8FAFC;border:1px dashed #94A3B8;border-radius:10px;padding:10px 12px;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.calc b{font-size:21px;font-variant-numeric:tabular-nums}
+.dialog .df{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-sync" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5l2 2M20 4v5h-5M20 12a8 8 0 0 1-14 5l-2-2M4 20v-5h5"/></symbol>
+    <symbol id="i-dash" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/></symbol>
+    <symbol id="i-site" viewBox="0 0 24 24"><path d="M4 21V7l8-4 8 4v14M9 21v-6h6v6"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></symbol>
+    <symbol id="i-export" viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5M4 15v5h16v-5"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></symbol>
+  </defs>
+</svg>
+
+<div class="bar">
+  <button data-tab="home" class="active">1 Dashboard</button>
+  <button data-tab="attendance">2 Attendance</button>
+  <button data-tab="listen">3 Voice search</button>
+  <button data-tab="confirm">4 Confirm</button>
+</div>
+<div class="note">Option D, Khata Pro. Open the menu on the dashboard for the drawer. Speak into the search bar to see voice fill a form.</div>
+
+<div class="phone">
+
+  <!-- 1. DASHBOARD -->
+  <section class="screen on" id="home">
+    <div class="topbar">
+      <button class="ib" data-drawer aria-label="Menu"><svg><use href="#i-menu"/></svg></button>
+      <div class="title">Dashboard<small>19 Oct 2026</small></div>
+      <button class="site">All sites <svg><use href="#i-down"/></svg></button>
+    </div>
+    <div class="scroll">
+      <div class="kpis">
+        <div class="kpi"><small>Labour today</small><b>₹18,400</b><em>24 workers</em></div>
+        <div class="kpi"><small>Material used today</small><b>₹62,500</b><em>3 sites</em></div>
+        <div class="kpi good"><small>Owed to me</small><b>₹3,40,000</b><em>2 bills open</em></div>
+        <div class="kpi bad"><small>I owe</small><b>₹1,85,250</b><em>Suppliers + labour</em></div>
+      </div>
+
+      <div class="sect"><span>Sites (3)</span><a href="#">View all</a></div>
+      <table>
+        <thead><tr><th>Site</th><th>Workers</th><th>Cost</th><th>Balance</th></tr></thead>
+        <tbody>
+          <tr class="click" data-go="attendance"><td><span class="n">Sector 21</span><span class="s">Gurugram</span></td><td>24</td><td>₹18,400</td><td class="neg">₹42,000</td></tr>
+          <tr class="click" data-go="attendance"><td><span class="n">Noida 62</span><span class="s">Slab pending</span></td><td>0</td><td>₹0</td><td class="neg">₹1,20,000</td></tr>
+          <tr class="click" data-go="attendance"><td><span class="n">Sector 56 Phase 3</span><span class="s">Finishing</span></td><td>11</td><td>₹7,200</td><td class="pos">₹0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <button class="fab" data-go="listen"><svg><use href="#i-plus"/></svg>New entry</button>
+    <div class="syncbar"><svg><use href="#i-sync"/></svg>Synced 2 minutes ago</div>
+
+    <div class="drawer" id="drawer" data-drawer>
+      <div class="panel">
+        <div class="who"><b>Suresh Agarwal</b><small>Owner · ForeMan Builders</small></div>
+        <a class="on"><svg><use href="#i-dash"/></svg>Dashboard</a>
+        <a><svg><use href="#i-site"/></svg>Sites</a>
+        <a data-go="attendance"><svg><use href="#i-users"/></svg>Labour</a>
+        <a><svg><use href="#i-box"/></svg>Materials</a>
+        <a><svg><use href="#i-doc"/></svg>Bills</a>
+        <div class="sep"></div>
+        <a><svg><use href="#i-export"/></svg>Export (Excel / CSV)</a>
+        <a><svg><use href="#i-gear"/></svg>Settings</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. ATTENDANCE -->
+  <section class="screen" id="attendance">
+    <div class="topbar">
+      <button class="ib" data-go="home" aria-label="Back"><svg style="transform:rotate(90deg)"><use href="#i-down"/></svg></button>
+      <div class="title">Attendance<small>Sector 21 · Mason crew</small></div>
+      <button class="site" style="background:#fff;color:var(--primary)"><svg><use href="#i-cal"/></svg>19/10/2026</button>
+    </div>
+    <div class="scroll" style="padding-top:12px">
+      <div class="ctl">
+        <div class="field"><svg><use href="#i-search"/></svg>Search worker</div>
+        <button class="btn solid"><svg><use href="#i-check"/></svg>All present</button>
+      </div>
+      <table class="tbl-att">
+        <thead><tr><th>Worker</th><th>Status</th><th>Wage</th></tr></thead>
+        <tbody>
+          <tr><td><span class="n">Ramesh Kumar</span><span class="s">Mason · ₹900/day</span></td><td><span class="chip p">P</span></td><td>₹900</td></tr>
+          <tr><td><span class="n">Sunil</span><span class="s">Helper · ₹600/day</span></td><td><span class="chip p">P</span></td><td>₹600</td></tr>
+          <tr><td><span class="n">Mohan</span><span class="s">Bar bender · ₹800/day</span></td><td><span class="chip h">HD</span></td><td>₹400</td></tr>
+          <tr><td><span class="n">Raju</span><span class="s">Carpenter · ₹850/day</span></td><td><span class="chip a">A</span></td><td>₹0</td></tr>
+          <tr><td><span class="n">Anil</span><span class="s">Helper · ₹600/day</span></td><td><span class="chip n">Pending</span></td><td>₹0</td></tr>
+          <tr class="tfoot"><td>Total</td><td>22 P · 2 HD</td><td>₹18,400</td></tr>
+        </tbody>
+      </table>
+      
+    </div>
+    <div class="syncbar"><svg><use href="#i-sync"/></svg>3 entries waiting to sync</div>
+    <button class="fab" data-go="listen"><svg><use href="#i-mic"/></svg>Speak</button>
+  </section>
+
+  <!-- 3. VOICE SEARCH (listening) -->
+  <section class="screen" id="listen">
+    <div class="topbar">
+      <button class="ib" data-go="attendance" aria-label="Back"><svg style="transform:rotate(90deg)"><use href="#i-down"/></svg></button>
+      <div class="title">New entry<small>Speak or type</small></div>
+    </div>
+    <div class="search listen">
+      <svg><use href="#i-search"/></svg>
+      <span class="q" style="color:#fff">Ramesh, 8 hours, Sector 21 site</span>
+      <span class="wave"><span></span><span></span><span></span><span></span><span></span></span>
+      <button class="mic" data-go="confirm" aria-label="Stop"><svg><use href="#i-mic"/></svg></button>
+    </div>
+    <div class="hint">Listening… Tap the mic to stop.</div>
+    <div class="heard">
+      <small>Understood as</small>
+      <mark>Ramesh Kumar</mark> (Mason) · <mark>8 hours</mark> attendance · <mark>Sector 21</mark> · <mark>Today</mark>
+    </div>
+    <div class="hint" style="margin-top:12px">Examples: "50 bags cement arrived" · "Sunil half day" · "₹2000 electricity bill paid"</div>
+    <div class="dim" style="margin-top:14px">
+      <table><thead><tr><th>Suggestions</th></tr></thead><tbody><tr><td>Ramesh Kumar · Sector 21</td></tr><tr><td>Ramesh Khatri · Noida 62</td></tr></tbody></table>
+    </div>
+  </section>
+
+  <!-- 4. CONFIRM FORM -->
+  <section class="screen" id="confirm">
+    <div class="topbar">
+      <button class="ib" data-go="listen" aria-label="Back"><svg style="transform:rotate(90deg)"><use href="#i-down"/></svg></button>
+      <div class="title">New attendance entry<small>Review and save</small></div>
+    </div>
+    <div class="scroll" style="padding:0"></div>
+    <div class="dialog">
+      <div class="dh"><b>Confirm</b><span><svg><use href="#i-mic"/></svg>Filled by voice</span></div>
+      <div class="body">
+        <div class="fl"><label>Worker</label><div class="in v">Ramesh Kumar (Mason)<i><svg><use href="#i-mic"/></svg>voice</i></div></div>
+        <div class="two">
+          <div class="fl"><label>Date</label><div class="in">19/10/2026</div></div>
+          <div class="fl"><label>Site</label><div class="in v">Sector 21<i><svg><use href="#i-mic"/></svg>voice</i></div></div>
+        </div>
+        <div class="two">
+          <div class="fl"><label>Hours</label><div class="in v">8.0<i><svg><use href="#i-mic"/></svg>voice</i></div></div>
+          <div class="fl"><label>Status</label><div class="in">Present (P) ▾</div></div>
+        </div>
+        <div class="calc"><span>Day wage<br><span style="font-size:12px;color:var(--muted)">₹900 × 8 / 8 hours</span></span><b>₹900</b></div>
+        <div class="calc" style="border-style:solid;background:#fff"><span>Advance deduction</span><b>₹0</b></div>
+      </div>
+      <div class="df">
+        <button class="btn" data-go="listen">Cancel</button>
+        <button class="btn solid" data-go="attendance"><svg><use href="#i-check"/></svg>Save</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  function show(id){
+    document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
+    document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+  }
+  document.addEventListener('click', e => {
+    const drawer = document.getElementById('drawer');
+    if (e.target.closest('[data-drawer]') && e.target.closest('.topbar')) { drawer.classList.add('open'); return; }
+    if (e.target === drawer) { drawer.classList.remove('open'); return; }
+    const go = e.target.closest('[data-go]');
+    if (go) { drawer.classList.remove('open'); show(go.dataset.go); return; }
+    const tab = e.target.closest('[data-tab]');
+    if (tab) { show(tab.dataset.tab); }
+  });
+</script>
+</body>
+</html>

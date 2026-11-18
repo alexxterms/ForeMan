@@ -1,0 +1,6 @@
+# Supabase CLI settings for ForeMan. Only the parts we change are listed.
+project_id = "foreman"
+
+[functions.voice-parse]
+# The function checks the login itself (it reads the caller's company membership with their token).
+verify_jwt = false

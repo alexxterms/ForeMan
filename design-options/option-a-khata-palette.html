@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Option A with Option D colours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F6F8; --surface:#FFFFFF; --primary:#1E3A8A; --secondary:#0E7490;
+  --success:#047857; --warning:#B45309; --danger:#B91C1C;
+  --text:#0F172A; --muted:#475569; --line:#DCE1E7;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#D9DEE4;font-family:Hind,sans-serif;color:var(--text);
+  display:flex;flex-direction:column;align-items:center;gap:14px;padding:18px 12px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.bar button{font:600 15px Hind;padding:8px 14px;border-radius:999px;border:1px solid #94A3B8;background:#fff;color:var(--text);cursor:pointer}
+.bar button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.note{font-size:14px;color:var(--muted);max-width:360px;text-align:center}
+.phone{width:360px;height:740px;background:var(--bg);border-radius:30px;overflow:hidden;position:relative;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;padding-top:14px}
+.screen.on{display:flex}
+.top{display:flex;align-items:center;gap:10px;padding:8px 16px 12px}
+.top h1{font-size:26px;font-weight:700;margin:0;line-height:1.1}
+.top small{display:block;font-size:15px;color:var(--muted);font-weight:500}
+.iconbtn{width:52px;height:52px;border-radius:14px;border:0;background:#fff;display:grid;place-items:center;color:var(--text);flex:none;cursor:pointer}
+.iconbtn svg{width:28px;height:28px}
+.chip{display:inline-flex;align-items:center;gap:6px;font:600 16px Hind;padding:8px 12px;border-radius:999px;background:#fff;border:1px solid var(--line)}
+.chip svg{width:20px;height:20px}
+.scroll{flex:1;overflow-y:auto;padding:4px 16px 110px}
+svg{stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn{height:56px;border-radius:16px;border:0;font:600 20px Hind;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;color:#fff;background:var(--primary);cursor:pointer}
+.btn svg{width:26px;height:26px}
+.btn.sec{background:#fff;color:var(--primary);border:2px solid var(--primary)}
+.btn.ok{background:var(--success)}
+.btn.warn{background:var(--secondary);color:var(--text)}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.4;border:2px dashed var(--muted)}
+.foot{position:absolute;left:0;right:0;bottom:0;padding:12px 16px 18px;background:linear-gradient(to top,var(--bg) 70%,rgba(244,246,248,0));display:flex;flex-direction:column;gap:10px}
+
+/* Sync status chip: three states, tap to preview each */
+#sync{border:0;cursor:pointer;font:700 14px Hind;padding:7px 12px;border-radius:999px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+#sync svg{width:18px;height:18px}
+#sync.sync-ok{background:#D1FAE5;color:#047857}
+#sync.sync-off{background:#E2E8F0;color:#475569}
+#sync.sync-busy{background:#DBEAFE;color:#1E3A8A}
+#sync.sync-busy svg{animation:spin 1.2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Home */
+.greet{padding:0 16px}
+.greet h2{font-size:24px;margin:4px 0 2px}
+.greet p{margin:0;font-size:18px;color:var(--muted)}
+.count{margin:12px 16px 14px;background:#fff;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;font-size:19px;font-weight:600}
+.count b{font-size:32px;font-variant-numeric:tabular-nums;color:var(--success)}
+.count small{display:block;font-size:15px;color:var(--muted);font-weight:500}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px}
+.tile{background:var(--surface);border:0;border-radius:20px;padding:14px;min-height:150px;display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;font-family:Hind;cursor:pointer;color:var(--text)}
+.tile .ic{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;color:#fff;margin-bottom:6px}
+.tile .ic svg{width:30px;height:30px}
+.tile b{font-size:21px;line-height:1.1}
+.tile small{font-size:15px;color:var(--muted)}
+.c-green{background:var(--success);box-shadow:0 0 0 5px #D1FAE5} .c-navy{background:var(--primary);box-shadow:0 0 0 5px #DBEAFE} .c-saff{background:#B45309;box-shadow:0 0 0 5px #FEF3C7} .c-grey{background:#475569;box-shadow:0 0 0 5px #E2E8F0} .c-brown{background:#334155;box-shadow:0 0 0 5px #E2E8F0} .c-teal{background:var(--secondary);box-shadow:0 0 0 5px #CFF0F7}
+.fab{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);width:76px;height:76px;border-radius:50%;border:0;background:var(--secondary);color:#fff;display:grid;place-items:center;box-shadow:0 6px 16px rgba(14,116,144,.35);cursor:pointer}
+.fab svg{width:36px;height:36px}
+.fab-label{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:14px;font-weight:600;color:var(--muted)}
+
+/* Attendance */
+.gang{margin:0 16px 10px;font-size:17px;font-weight:600;color:var(--muted)}
+.banner{margin:0 16px 12px;background:#FEF3C7;border:2px solid var(--warning);border-radius:16px;padding:10px 12px;display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600}
+.banner button{margin-left:auto;font:700 16px Hind;background:var(--primary);color:#fff;border:0;border-radius:12px;padding:10px 12px;cursor:pointer}
+.worker{background:var(--surface);border-radius:18px;padding:12px;margin:0 16px 10px}
+.wh{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.av{width:50px;height:50px;border-radius:50%;background:#DBEAFE;color:var(--primary);display:grid;place-items:center;font:700 22px Hind;flex:none}
+.wh b{font-size:21px;display:block;line-height:1.1}
+.wh small{font-size:16px;color:var(--muted)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.seg button{height:44px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--muted);font:600 15px Hind;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.seg button svg{width:26px;height:26px}
+.seg button.on[data-k="p"]{background:var(--success);border-color:var(--success);color:#fff}
+.seg button.on[data-k="h"]{background:var(--warning);border-color:var(--warning);color:#fff}
+.seg button.on[data-k="a"]{background:var(--danger);border-color:var(--danger);color:#fff}
+.seg-row{display:flex;gap:10px}
+.half{flex:1}
+
+/* Voice */
+.vcenter{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:0 20px 120px;text-align:center}
+.mic-wrap{position:relative;width:170px;height:170px;display:grid;place-items:center}
+.ring{position:absolute;inset:0;border-radius:50%;border:5px solid var(--danger);animation:pulse 1.6s infinite}
+.ring.r2{animation-delay:.8s}
+@keyframes pulse{0%{transform:scale(.7);opacity:.9}100%{transform:scale(1.15);opacity:0}}
+.mic-big{width:120px;height:120px;border-radius:50%;background:var(--danger);display:grid;place-items:center;color:#fff;position:relative}
+.mic-big svg{width:56px;height:56px}
+.bars{display:flex;gap:7px;align-items:flex-end;height:44px}
+.bars span{width:10px;background:var(--secondary);border-radius:5px;height:20px;animation:bar 1s infinite ease-in-out}
+.bars span:nth-child(2){animation-delay:.15s}.bars span:nth-child(3){animation-delay:.3s}.bars span:nth-child(4){animation-delay:.45s}.bars span:nth-child(5){animation-delay:.6s}
+@keyframes bar{0%,100%{height:12px}50%{height:44px}}
+.status{font-size:24px;font-weight:700}
+.transcript{background:#fff;border-radius:18px;padding:14px 16px;font-size:22px;line-height:1.5;width:100%;text-align:left}
+.transcript small{display:block;font-size:14px;color:var(--muted);margin-bottom:4px}
+.eg{font-size:16px;color:var(--muted)}
+
+/* Confirm */
+.parse{margin:0 16px;background:#fff;border-radius:20px;padding:6px 0}
+.prow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:2px solid var(--bg)}
+.prow:last-child{border-bottom:0}
+.prow .ic{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:#fff;flex:none}
+.prow .ic svg{width:26px;height:26px}
+.prow small{display:block;font-size:15px;color:var(--muted)}
+.prow b{font-size:21px}
+.prow button{margin-left:auto;font:600 15px Hind;background:none;border:1px solid var(--line);border-radius:10px;padding:6px 10px;color:var(--primary);cursor:pointer}
+.ok-note{margin:14px 16px 0;font-size:16px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.ok-note svg{width:22px;height:22px;flex:none}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- Line icons: stroke only, so tiles show white outlines on colour -->
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></symbol>
+    <symbol id="i-half" viewBox="0 0 24 24"><path d="M6.5 17a5.5 5.5 0 0 1 11 0z"/><path d="M2.5 17h19M4.5 20.5h15M12 6.5v2.2M5.6 10.2l1.5 1.5M18.4 10.2l-1.5 1.5"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1z"/><path d="M18.5 2.8v3.4M16.8 4.5h3.4"/></symbol>
+
+    <!-- Hard hat: workers -->
+    <symbol id="i-hat" viewBox="0 0 24 24"><path d="M3.5 15.5a8.5 8.5 0 0 1 17 0z"/><path d="M2.5 15.5h19v2.2a1.3 1.3 0 0 1-1.3 1.3H3.8a1.3 1.3 0 0 1-1.3-1.3z"/><path d="M12 7v8.5M7.2 10.5a6 6 0 0 1 2.5-2.4"/></symbol>
+
+    <!-- Clipboard with tick: attendance register -->
+    <symbol id="i-clip" viewBox="0 0 24 24"><rect x="4.5" y="4" width="15" height="17.5" rx="2.5"/><rect x="8.8" y="2.2" width="6.4" height="3.8" rx="1.3"/><path d="M8.3 13.2l2.5 2.5 4.9-5"/></symbol>
+
+    <!-- Banknote: wages -->
+    <symbol id="i-rupee" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2.5"/><path d="M3 10h18M16 14.5h2"/><path d="M3 9V7.5A1.5 1.5 0 0 1 4.5 6H17"/></symbol>
+
+    <!-- Cement bag: materials -->
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M3 7.5L12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5l9 4.5 9-4.5M12 12v9"/></symbol>
+
+    <!-- Receipt: expenses -->
+    <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M3 12V4.5A1.5 1.5 0 0 1 4.5 3H12l9 9-9 9z"/><circle cx="7.5" cy="7.5" r="1.5"/></symbol>
+
+    <!-- Invoice: bills -->
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 2.8h8.4L19 7.4v13.8a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3.8a1 1 0 0 1 1-1z"/><path d="M14.4 2.8v4.6H19"/><path d="M8.5 12h7M8.5 15.2h7M8.5 18.4h4"/></symbol>
+
+    <!-- Tower crane: sites -->
+    <symbol id="i-site" viewBox="0 0 24 24"><path d="M4 21V4h10v17M14 9h6v12M2 21h20"/><path d="M7 7.5h1.5M10.5 7.5h1.5M7 11h1.5M10.5 11h1.5M7 14.5h1.5M10.5 14.5h1.5"/></symbol>
+
+    <!-- Camera, mic, and utility icons -->
+    <symbol id="i-cam" viewBox="0 0 24 24"><path d="M3 8.2a1.5 1.5 0 0 1 1.5-1.5h3.2l1.8-2.7h5l1.8 2.7h3.2A1.5 1.5 0 0 1 21 8.2v10.3a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/><circle cx="12" cy="13.2" r="3.6"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="11.5" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.2" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.5s-6.8-6-6.8-11.3a6.8 6.8 0 0 1 13.6 0C18.8 15.5 12 21.5 12 21.5z"/><circle cx="12" cy="10.2" r="2.4"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-sync" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5l2 2M20 4v5h-5M20 12a8 8 0 0 1-14 5l-2-2M4 20v-5h5"/></symbol>
+    <symbol id="i-cloudoff" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M7 18h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 9.5 4.5 4.5 0 0 0 7 18z"/></symbol>
+  </defs>
+</svg>
+
+<div class="bar">
+  <button data-tab="home" class="active">1 Home</button>
+  <button data-tab="attendance">2 Attendance</button>
+  <button data-tab="listen">3 Voice</button>
+  <button data-tab="confirm">4 Confirm</button>
+</div>
+<div class="note">Option A layout, Option D colour palette. Tap the screens to move around, tap the buttons to try them.</div>
+
+<div class="phone">
+
+  <!-- 1. HOME -->
+  <section class="screen on" id="home">
+    <div class="top" style="justify-content:space-between">
+      <span class="chip"><svg><use href="#i-pin"/></svg>Sector 21 ▾</span>
+      <button class="chip sync-off" id="sync" aria-live="polite"><svg><use href="#i-cloudoff"/></svg>Saved on phone · 3</button>
+    </div>
+    <div class="greet">
+      <h2>Good morning, Suresh</h2>
+      <p>Sector 21 site manager</p>
+    </div>
+    <div class="count">
+      <svg style="width:30px;height:30px;color:var(--success)"><use href="#i-hat"/></svg>
+      <span><b>24</b> workers<small>present today</small></span>
+    </div>
+    <div class="grid">
+      <button class="tile" data-go="attendance"><span class="ic c-green"><svg><use href="#i-clip"/></svg></span><b>Attendance</b><small>Mark presence</small></button>
+      <button class="tile" data-go="home"><span class="ic c-navy"><svg><use href="#i-rupee"/></svg></span><b>Wages</b><small>Pay &amp; advances</small></button>
+      <button class="tile" data-go="home"><span class="ic c-saff"><svg><use href="#i-box"/></svg></span><b>Materials</b><small>Stock in / out</small></button>
+      <button class="tile" data-go="home"><span class="ic c-grey"><svg><use href="#i-receipt"/></svg></span><b>Expenses</b><small>Petty cash &amp; diary</small></button>
+      <button class="tile" data-go="home"><span class="ic c-brown"><svg><use href="#i-doc"/></svg></span><b>Bills</b><small>Client invoices</small></button>
+      <button class="tile" data-go="home"><span class="ic c-teal"><svg><use href="#i-site"/></svg></span><b>Sites</b><small>All sites</small></button>
+    </div>
+    <button class="fab" data-go="listen" aria-label="Speak an entry"><svg><use href="#i-mic"/></svg></button>
+    <div class="fab-label">Speak</div>
+  </section>
+
+  <!-- 2. ATTENDANCE -->
+  <section class="screen" id="attendance">
+    <div class="top">
+      <button class="iconbtn" data-go="home" aria-label="Back"><svg><use href="#i-back"/></svg></button>
+      <div><h1>Attendance</h1><small>Today 19/10/2026 · Sector 21</small></div>
+    </div>
+    <div class="scroll">
+      
+      <button class="btn ok" style="margin:0 0 12px">All present</button>
+      <div class="gang">Mason crew · Mukadam Ramesh</div>
+
+      <div class="worker">
+        <div class="wh"><span class="av">R</span><div><b>Ramesh Kumar</b><small>Mason · ₹900 / day</small></div></div>
+        <div class="seg" data-seg>
+          <button data-k="p" class="on">Present</button>
+          <button data-k="h">Half</button>
+          <button data-k="a">Absent</button>
+        </div>
+      </div>
+
+      <div class="worker">
+        <div class="wh"><span class="av">S</span><div><b>Sunil</b><small>Helper · ₹600 / day</small></div></div>
+        <div class="seg" data-seg>
+          <button data-k="p" class="on">Present</button>
+          <button data-k="h">Half</button>
+          <button data-k="a">Absent</button>
+        </div>
+      </div>
+
+      <div class="worker">
+        <div class="wh"><span class="av">M</span><div><b>Mohan</b><small>Bar bender · ₹800 / day</small></div></div>
+        <div class="seg" data-seg>
+          <button data-k="p">Present</button>
+          <button data-k="h" class="on">Half</button>
+          <button data-k="a">Absent</button>
+        </div>
+      </div>
+
+      <div class="worker">
+        <div class="wh"><span class="av">R</span><div><b>Raju</b><small>Carpenter · ₹850 / day</small></div></div>
+        <div class="seg" data-seg>
+          <button data-k="p">Present</button>
+          <button data-k="h">Half</button>
+          <button data-k="a" class="on">Absent</button>
+        </div>
+      </div>
+    </div>
+    <div class="foot">
+      <div class="seg-row">
+        <button class="btn sec half"><svg><use href="#i-cam"/></svg>Photo</button>
+        <button class="btn half" data-go="home"><svg><use href="#i-check"/></svg>Save</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. VOICE LISTENING -->
+  <section class="screen" id="listen">
+    <div class="top">
+      <button class="iconbtn" data-go="attendance" aria-label="Back"><svg><use href="#i-back"/></svg></button>
+      <div><h1>Speak</h1><small>English or Hinglish</small></div>
+    </div>
+    <div class="vcenter">
+      <div class="mic-wrap">
+        <span class="ring"></span><span class="ring r2"></span>
+        <span class="mic-big"><svg><use href="#i-mic"/></svg></span>
+      </div>
+      <div class="bars"><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="status">Listening…</div>
+      <div class="transcript"><small>You said</small>Ramesh, 8 hours today, Sector 21 site</div>
+      <div class="eg">Example: "50 bags cement arrived" · "Sunil half day"</div>
+    </div>
+    <div class="foot">
+      <button class="btn" data-go="confirm"><svg><use href="#i-check"/></svg>Stop</button>
+    </div>
+  </section>
+
+  <!-- 4. VOICE CONFIRM -->
+  <section class="screen" id="confirm">
+    <div class="top">
+      <button class="iconbtn" data-go="listen" aria-label="Back"><svg><use href="#i-back"/></svg></button>
+      <div><h1>Is this right?</h1><small>Check before saving</small></div>
+    </div>
+    <div class="scroll" style="padding-bottom:120px">
+      <div class="parse">
+        <div class="prow"><span class="ic c-green"><svg><use href="#i-user"/></svg></span><div><small>Worker</small><b>Ramesh Kumar</b></div><button>Change</button></div>
+        <div class="prow"><span class="ic c-navy"><svg><use href="#i-hat"/></svg></span><div><small>Entry</small><b>Attendance · 8 hours</b></div><button>Change</button></div>
+        <div class="prow"><span class="ic c-teal"><svg><use href="#i-site"/></svg></span><div><small>Site</small><b>Sector 21</b></div><button>Change</button></div>
+        <div class="prow"><span class="ic c-grey"><svg><use href="#i-cal"/></svg></span><div><small>Date</small><b>Today 19/10/2026</b></div><button>Change</button></div>
+      </div>
+      <div class="ok-note"><svg><use href="#i-cloudoff"/></svg>No network? It saves on the phone and syncs later.</div>
+    </div>
+    <div class="foot">
+      <button class="btn ok" data-go="attendance"><svg><use href="#i-check"/></svg>Yes, save</button>
+      <button class="btn sec" data-go="listen"><svg><use href="#i-mic"/></svg>Speak again</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  function show(id){
+    document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
+    document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+  }
+  const SYNC_STATES = [
+    {cls:'sync-ok',   icon:'i-check',    text:'All saved'},
+    {cls:'sync-off',  icon:'i-cloudoff', text:'Saved on phone · 3'},
+    {cls:'sync-busy', icon:'i-sync',     text:'Sending · 3'}
+  ];
+  let syncIndex = 1;
+  document.getElementById('sync').addEventListener('click', () => {
+    syncIndex = (syncIndex + 1) % SYNC_STATES.length;
+    const s = SYNC_STATES[syncIndex], el = document.getElementById('sync');
+    el.className = 'chip ' + s.cls;
+    el.id = 'sync';
+    el.innerHTML = '<svg><use href="#' + s.icon + '"/></svg>' + s.text;
+  });
+  document.addEventListener('click', e => {
+    const go = e.target.closest('[data-go]');
+    if (go) { show(go.dataset.go); return; }
+    const tab = e.target.closest('[data-tab]');
+    if (tab) { show(tab.dataset.tab); return; }
+    const seg = e.target.closest('[data-seg] button');
+    if (seg) {
+      seg.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('on'));
+      seg.classList.add('on');
+    }
+  });
+</script>
+</body>
+</html>

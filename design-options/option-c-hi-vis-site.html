@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Option C: Hi-Vis Site</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F5F0; --surface:#FFFFFF; --primary:#FFC400; --secondary:#111111;
+  --success:#0E7A3B; --warning:#FF7A00; --danger:#D00000;
+  --text:#111111; --muted:#4B4B4B; --ink:#111111;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#CFCFC8;font-family:Hind,sans-serif;color:var(--text);
+  display:flex;flex-direction:column;align-items:center;gap:14px;padding:18px 12px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.bar button{font:700 15px Hind;padding:8px 14px;border:2px solid #111;background:#fff;color:#111;cursor:pointer;border-radius:0}
+.bar button.active{background:#FFC400;color:#111}
+.note{font-size:14px;color:var(--muted);max-width:360px;text-align:center}
+.phone{width:360px;height:740px;background:var(--bg);border-radius:26px;overflow:hidden;position:relative;border:6px solid #111;box-shadow:0 12px 30px rgba(0,0,0,.2)}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--bg)}
+.screen.on{display:flex}
+svg{stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:square;stroke-linejoin:miter;width:26px;height:26px}
+.sitebar{background:#FFC400;border-bottom:3px solid #111;padding:12px 14px;display:flex;align-items:center;gap:10px;min-height:66px}
+.sitebar .back{width:44px;height:44px;border:2px solid #111;background:#111;color:#FFC400;display:grid;place-items:center;flex:none;cursor:pointer}
+.sitebar .back svg{width:24px;height:24px}
+.sitebar h1{font-family:'Baloo 2',Hind,sans-serif;font-weight:800;font-size:24px;margin:0;line-height:1}
+.sitebar small{display:block;font-size:14px;font-weight:600;color:#111}
+.sitebar .sw{margin-left:auto;background:#111;color:#FFC400;padding:6px 10px;font:700 15px Hind;border:0;cursor:pointer;display:flex;align-items:center;gap:4px}
+.sitebar .sw svg{width:18px;height:18px}
+.scroll{flex:1;overflow-y:auto;padding:14px 14px 112px}
+.blocks{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.blk{background:#fff;border:2px solid #111;padding:12px;min-height:124px;display:flex;flex-direction:column;justify-content:space-between;text-align:left;font-family:Hind;cursor:pointer;color:#111}
+.blk small{font-size:15px;font-weight:700}
+.blk b{font-family:'Baloo 2',sans-serif;font-size:30px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.blk.hi{background:#111;color:#FFC400}
+.blk.hi small{color:#fff}
+.blk.g b{color:#0E7A3B}
+.blk.r b{color:#D00000}
+.hdr{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:20px;margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.hdr::after{content:"";flex:1;height:6px;background:repeating-linear-gradient(-45deg,#111 0 10px,#FFC400 10px 20px)}
+.listrow{background:#fff;border:2px solid #111;padding:10px 12px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.listrow .sq{width:40px;height:40px;background:#111;color:#FFC400;display:grid;place-items:center;font:800 18px 'Baloo 2';flex:none}
+.listrow b{font-size:19px;display:block;line-height:1.1}
+.listrow small{font-size:15px;color:var(--muted)}
+.listrow .amt{margin-left:auto;font:800 22px 'Baloo 2'}
+/* Buttons */
+.btn{height:60px;border:2px solid #111;background:#FFC400;color:#111;font:700 20px Hind;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;cursor:pointer;border-radius:4px}
+.btn svg{width:26px;height:26px}
+.btn.blk-b{background:#111;color:#fff}
+.btn.grn{background:#0E7A3B;color:#fff}
+.btn:active{background:#111;color:#FFC400}
+.btn:disabled{background:#D9D9D4;background-image:repeating-linear-gradient(-45deg,transparent 0 6px,#BDBDB5 6px 8px);color:#6E6E68;border-color:#6E6E68}
+/* Tiles */
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wtile{background:#fff;border:2px solid #111;text-align:left;padding:0;cursor:pointer;font-family:Hind;color:#111;display:flex;flex-direction:column;min-height:120px}
+.wtile .band{padding:8px 10px;font:800 17px 'Baloo 2';color:#fff;background:#8E8E86;display:flex;justify-content:space-between;align-items:center}
+.wtile .band i{font-style:normal;font-size:15px;font-family:Hind;font-weight:700}
+.wtile .body{padding:10px;display:flex;flex-direction:column;gap:2px;flex:1}
+.wtile b{font-size:20px;line-height:1.1}
+.wtile small{font-size:15px;color:var(--muted)}
+.wtile[data-s="p"] .band{background:#0E7A3B}
+.wtile[data-s="h"] .band{background:#FF7A00;color:#111}
+.wtile[data-s="a"] .band{background:#D00000}
+.wtile[data-s="n"] .band{background:#8E8E86}
+.allbar{width:100%;height:58px;background:#111;color:#FFC400;border:2px solid #111;font:700 19px Hind;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;cursor:pointer}
+.allbar svg{width:24px;height:24px}
+.footbar{position:absolute;left:0;right:0;bottom:0;height:98px;background:#111;color:#fff;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;padding-bottom:8px}
+.footbar button{background:none;border:0;color:#fff;font:700 13px Hind;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;cursor:pointer}
+.footbar button svg{width:26px;height:26px}
+.footbar button.on{color:#FFC400}
+.footbar button.on svg{color:#FFC400}
+.footbar .vbtn{position:relative;top:-18px;width:76px;height:76px;margin:0 auto;background:#FFC400;color:#111;border:3px solid #111;outline:3px solid #FFC400;display:grid;place-items:center;padding:0;justify-self:center;align-self:start;font:800 14px Hind}
+.footbar .vbtn svg{width:34px;height:34px;stroke-width:2.6}
+.footcount{position:absolute;left:0;right:0;bottom:98px;background:#111;color:#fff;font:700 16px Hind;padding:8px 14px;display:flex;justify-content:space-between;align-items:center}
+.footcount b{font-family:'Baloo 2';font-size:22px;color:#FFC400}
+/* Listening */
+.dark{background:#111;color:#fff;padding-top:0}
+.dark .sitebar{background:#111;color:#FFC400;border-bottom:3px solid #FFC400}
+.dark .sitebar .back{background:#FFC400;color:#111;border-color:#FFC400}
+.dark .sitebar h1{color:#FFC400}
+.dark .sitebar small{color:#fff}
+.lcenter{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:0 20px 130px;text-align:center}
+.lbig{font-family:'Baloo 2';font-weight:800;font-size:40px;color:#FFC400;line-height:1}
+.lsub{font-size:17px;color:#fff}
+.eq{display:flex;gap:8px;align-items:flex-end;height:90px}
+.eq span{width:18px;background:#FFC400;height:20px;animation:eq 0.9s infinite ease-in-out}
+.eq span:nth-child(2){animation-delay:.12s}.eq span:nth-child(3){animation-delay:.24s}.eq span:nth-child(4){animation-delay:.36s}.eq span:nth-child(5){animation-delay:.48s}.eq span:nth-child(6){animation-delay:.6s}
+@keyframes eq{0%,100%{height:16px}50%{height:90px}}
+.tx{border:2px solid #FFC400;padding:14px;font-size:22px;line-height:1.45;width:100%;text-align:left;color:#fff}
+.tx small{display:block;font-size:14px;color:#FFC400;font-weight:700;margin-bottom:4px}
+.dark .footbar{background:#000}
+/* Confirm */
+.stripe{height:14px;background:repeating-linear-gradient(-45deg,#111 0 14px,#FFC400 14px 28px);border-bottom:3px solid #111}
+.crow{display:flex;align-items:center;gap:12px;padding:12px;border:2px solid #111;background:#fff;margin-bottom:10px}
+.crow .k{width:44px;height:44px;background:#111;color:#FFC400;display:grid;place-items:center;flex:none}
+.crow .k svg{width:24px;height:24px}
+.crow small{display:block;font-size:15px;font-weight:700;color:var(--muted)}
+.crow b{font-size:21px}
+.crow button{margin-left:auto;border:2px solid #111;background:#fff;font:700 15px Hind;padding:6px 10px;cursor:pointer;color:#111}
+.cfoot{position:absolute;left:0;right:0;bottom:0;background:#111;padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cfoot .btn{height:60px;font-size:18px}
+.okline{font-size:16px;font-weight:600;display:flex;gap:8px;align-items:center;margin-top:4px}
+.okline svg{width:22px;height:22px;flex:none}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v10H3z"/><path d="M10 21v-6h4v6"/></symbol>
+    <symbol id="i-hazri" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><path d="M7 12.5l3.5 3.5L17 9"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/></symbol>
+    <symbol id="i-bill" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-helmet" viewBox="0 0 24 24"><path d="M3 15a9 9 0 0 1 18 0"/><path d="M3 15h18v2H3z"/></symbol>
+    <symbol id="i-site" viewBox="0 0 24 24"><path d="M4 21V7l8-4 8 4v14M9 21v-6h6v6"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M7 18h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 9.5 4.5 4.5 0 0 0 7 18z"/></symbol>
+  </defs>
+</svg>
+
+<div class="bar">
+  <button data-tab="home" class="active">1 Home</button>
+  <button data-tab="attendance">2 Attendance</button>
+  <button data-tab="listen">3 Voice</button>
+  <button data-tab="confirm">4 Confirm</button>
+</div>
+<div class="note">Option C, Hi-Vis Site. Tap a worker tile to cycle its status: green (present), orange (half), red (absent), grey (pending).</div>
+
+<div class="phone">
+
+  <!-- 1. HOME -->
+  <section class="screen on" id="home">
+    <div class="sitebar">
+      <div><h1>Sector 21</h1><small>Gurugram · Sun 19/10/2026</small></div>
+      <button class="sw"><svg><use href="#i-down"/></svg>Switch</button>
+    </div>
+    <div class="scroll">
+      <div class="blocks">
+        <button class="blk hi" data-go="attendance"><small>Workers today</small><b>24 / 25</b></button>
+        <button class="blk" data-go="home"><small>Cost today</small><b>₹18,400</b></button>
+        <button class="blk g" data-go="home"><small>Owed to me</small><b>₹3.4 lakh</b></button>
+        <button class="blk r" data-go="home"><small>I owe</small><b>₹1.85 lakh</b></button>
+      </div>
+
+      <div class="hdr">Today's tasks</div>
+      <div class="listrow"><span class="sq">1</span><div><b>Mark mason crew attendance</b><small>3 workers left</small></div><span class="amt">→</span></div>
+      <div class="listrow"><span class="sq">2</span><div><b>50 bags cement arrived?</b><small>Add material entry</small></div><span class="amt">→</span></div>
+      <div class="listrow"><span class="sq">3</span><div><b>Send bill #4</b><small>Slab · ₹42,000 due</small></div><span class="amt">→</span></div>
+    </div>
+    <div class="footbar">
+      <button class="on" data-go="home"><svg><use href="#i-home"/></svg>Home</button>
+      <button data-go="attendance"><svg><use href="#i-hazri"/></svg>Attendance</button>
+      <button class="vbtn" data-go="listen" aria-label="Voice entry"><svg><use href="#i-mic"/></svg></button>
+      <button data-go="home"><svg><use href="#i-box"/></svg>Stock</button>
+      <button data-go="home"><svg><use href="#i-bill"/></svg>Bills</button>
+    </div>
+  </section>
+
+  <!-- 2. ATTENDANCE -->
+  <section class="screen" id="attendance">
+    <div class="sitebar">
+      <button class="back" data-go="home" aria-label="Back"><svg><use href="#i-back"/></svg></button>
+      <div><h1>Attendance</h1><small>Mason crew · today</small></div>
+    </div>
+    <div class="scroll" style="padding-bottom:150px">
+      <button class="allbar"><svg><use href="#i-check"/></svg>All present</button>
+      <div class="wgrid">
+        <button class="wtile" data-s="p"><div class="band">Ramesh<i>Present</i></div><div class="body"><b>Ramesh Kumar</b><small>Mason · ₹900</small></div></button>
+        <button class="wtile" data-s="p"><div class="band">Sunil<i>Present</i></div><div class="body"><b>Sunil</b><small>Helper · ₹600</small></div></button>
+        <button class="wtile" data-s="h"><div class="band">Mohan<i>Half</i></div><div class="body"><b>Mohan</b><small>Bar bender · ₹800</small></div></button>
+        <button class="wtile" data-s="a"><div class="band">Raju<i>Absent</i></div><div class="body"><b>Raju</b><small>Carpenter · ₹850</small></div></button>
+        <button class="wtile" data-s="n"><div class="band">Anil<i>Pending</i></div><div class="body"><b>Anil</b><small>Helper · ₹600</small></div></button>
+        <button class="wtile" data-s="p"><div class="band">Guddu<i>Present</i></div><div class="body"><b>Guddu</b><small>Mason · ₹900</small></div></button>
+      </div>
+    </div>
+    <div class="footcount"><span>Present <b>22</b> / 25</span><span>Half 2 · Absent 1</span></div>
+    <div class="footbar">
+      <button data-go="home"><svg><use href="#i-home"/></svg>Home</button>
+      <button class="on" data-go="attendance"><svg><use href="#i-hazri"/></svg>Attendance</button>
+      <button class="vbtn" data-go="listen" aria-label="Voice entry"><svg><use href="#i-mic"/></svg></button>
+      <button data-go="home"><svg><use href="#i-box"/></svg>Stock</button>
+      <button data-go="home"><svg><use href="#i-bill"/></svg>Bills</button>
+    </div>
+  </section>
+
+  <!-- 3. VOICE LISTENING -->
+  <section class="screen dark" id="listen">
+    <div class="sitebar">
+      <button class="back" data-go="attendance" aria-label="Back"><svg><use href="#i-back"/></svg></button>
+      <div><h1>Speak</h1><small>English or Hinglish</small></div>
+    </div>
+    <div class="lcenter">
+      <div class="eq"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="lbig">Listening…</div>
+      <div class="lsub">Tap the square to stop</div>
+      <div class="tx"><small>You said</small>Ramesh, 8 hours today, Sector 21 site</div>
+    </div>
+    <div class="footbar" style="background:#000">
+      <button data-go="home"><svg><use href="#i-home"/></svg>Home</button>
+      <button data-go="attendance"><svg><use href="#i-hazri"/></svg>Attendance</button>
+      <button class="vbtn" data-go="confirm" aria-label="Stop"><svg><use href="#i-stop"/></svg></button>
+      <button data-go="home"><svg><use href="#i-box"/></svg>Stock</button>
+      <button data-go="home"><svg><use href="#i-bill"/></svg>Bills</button>
+    </div>
+  </section>
+
+  <!-- 4. VOICE CONFIRM -->
+  <section class="screen" id="confirm">
+    <div class="sitebar">
+      <button class="back" data-go="listen" aria-label="Back"><svg><use href="#i-back"/></svg></button>
+      <div><h1>Is this right?</h1><small>Check before saving</small></div>
+    </div>
+    <div class="stripe"></div>
+    <div class="scroll" style="padding-bottom:130px">
+      <div class="crow"><span class="k"><svg><use href="#i-user"/></svg></span><div><small>Worker</small><b>Ramesh Kumar</b></div><button>Change</button></div>
+      <div class="crow"><span class="k"><svg><use href="#i-helmet"/></svg></span><div><small>Entry</small><b>Attendance · 8 hours</b></div><button>Change</button></div>
+      <div class="crow"><span class="k"><svg><use href="#i-site"/></svg></span><div><small>Site</small><b>Sector 21</b></div><button>Change</button></div>
+      <div class="crow"><span class="k"><svg><use href="#i-cal"/></svg></span><div><small>Date</small><b>Today 19/10/2026</b></div><button>Change</button></div>
+      <div class="okline"><svg><use href="#i-cloud"/></svg>No network? It saves on the phone.</div>
+    </div>
+    <div class="cfoot">
+      <button class="btn blk-b" data-go="listen">Speak again</button>
+      <button class="btn grn" data-go="attendance"><svg><use href="#i-check"/></svg>Save</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  const STATES = ['p','h','a','n'];
+  const LABEL = {p:'Present', h:'Half', a:'Absent', n:'Pending'};
+  function show(id){
+    document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
+    document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+  }
+  document.addEventListener('click', e => {
+    const tile = e.target.closest('.wtile');
+    if (tile) {
+      const next = STATES[(STATES.indexOf(tile.dataset.s) + 1) % STATES.length];
+      tile.dataset.s = next;
+      tile.querySelector('.band i').textContent = LABEL[next];
+      return;
+    }
+    const go = e.target.closest('[data-go]');
+    if (go) { show(go.dataset.go); return; }
+    const tab = e.target.closest('[data-tab]');
+    if (tab) { show(tab.dataset.tab); return; }
+  });
+</script>
+</body>
+</html>

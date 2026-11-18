@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Materials screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F6F8; --surface:#FFFFFF; --line:#DCE1E7;
+    --primary:#1E3A8A; --secondary:#0E7490;
+    --success:#047857; --warning:#B45309; --danger:#B91C1C;
+    --text:#0F172A; --muted:#475569;
+    --t-success:#D1FAE5; --t-primary:#DBEAFE; --t-warning:#FEF3C7; --t-neutral:#E2E8F0;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#D9DEE4;color:var(--text);font-family:Hind,sans-serif;display:flex;flex-direction:column;align-items:center;gap:14px;padding:18px 12px}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .bar button{font:600 15px Hind;padding:8px 14px;border-radius:999px;border:1px solid #94A3B8;background:#fff;color:var(--text);cursor:pointer}
+  .bar button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+  .note{font-size:14px;color:var(--muted);max-width:360px;text-align:center}
+  .phone{width:360px;height:740px;background:var(--bg);border-radius:30px;overflow:hidden;position:relative;box-shadow:0 12px 30px rgba(15,23,42,.18)}
+  .screen{position:absolute;inset:0;display:none;flex-direction:column;padding-top:14px}
+  .screen.on{display:flex}
+  svg{stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;width:24px;height:24px}
+
+  .top{display:flex;align-items:center;gap:10px;padding:6px 16px 10px}
+  .top h1{font-size:26px;font-weight:700;margin:0;line-height:1.1}
+  .top small{display:block;font-size:15px;color:var(--muted);font-weight:500}
+  .iconbtn{width:52px;height:52px;border-radius:14px;border:0;background:#fff;display:grid;place-items:center;color:var(--text);flex:none;cursor:pointer}
+  .iconbtn svg{width:28px;height:28px}
+  .statusrow{display:flex;justify-content:space-between;gap:8px;padding:0 16px 12px;align-items:center}
+  .site{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:14px;font-weight:600;color:var(--text)}
+  .chip{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:7px 12px;font:700 14px Hind;white-space:nowrap}
+  .chip svg{width:18px;height:18px;stroke-width:2.2}
+  .c-ok{background:var(--t-success);color:var(--success)}
+  .c-off{background:var(--t-neutral);color:var(--muted)}
+  .c-busy{background:var(--t-primary);color:var(--primary)}
+  .c-warn{background:var(--t-warning);color:var(--warning)}
+  .c-out{background:#FEE2E2;color:var(--danger)}
+  .pill-s{display:inline-flex;align-items:center;gap:6px;border-radius:999px;font:700 14px Hind;padding:5px 11px;white-space:nowrap}
+  .pill-s svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .p-warn{background:var(--t-warning);color:var(--warning)}
+  .p-out{background:#FEE2E2;color:var(--danger)}
+  .spin{animation:spin 1.2s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .scroll{flex:1;overflow-y:auto;padding:0 16px 120px}
+  .label{font-size:15px;color:var(--muted);font-weight:600;margin:12px 2px 8px}
+
+  /* Stock rows */
+  .mrow{background:var(--surface);border-radius:16px;padding:12px;margin-bottom:10px}
+  .mtop{display:flex;align-items:center;gap:12px}
+  .badge{width:46px;height:46px;border-radius:50%;background:var(--warning);color:#fff;display:grid;place-items:center;box-shadow:0 0 0 5px var(--t-warning);flex:none}
+  .badge svg{width:26px;height:26px}
+  .mname{flex:1;min-width:0}
+  .mname b{display:block;font-size:19px;line-height:1.15}
+  .mname small{font-size:14px;color:var(--muted)}
+  .mqty{text-align:right;font-variant-numeric:tabular-nums}
+  .mqty b{display:block;font-size:24px;line-height:1}
+  .mqty small{font-size:14px;color:var(--muted)}
+  .track{height:8px;background:var(--t-neutral);border-radius:99px;margin:10px 0 8px;overflow:hidden}
+  .track span{display:block;height:100%;border-radius:99px}
+  .mbot{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--muted);gap:8px}
+  .owed b{color:var(--danger);font-weight:700}
+
+  /* Segmented status control, text only, 44px */
+  .seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}
+  .seg button{height:44px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--muted);font:600 15px Hind;cursor:pointer}
+  .seg button.on{background:var(--primary);border-color:var(--primary);color:#fff}
+
+  /* Buttons */
+  .btn{height:56px;border-radius:16px;border:0;font:600 20px Hind;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;color:#fff;background:var(--primary);cursor:pointer}
+  .btn svg{width:24px;height:24px}
+  .btn.sec{background:#fff;color:var(--primary);border:2px solid var(--primary)}
+  .btn.ok{background:var(--success)}
+  .btn:active{transform:scale(.97)}
+  .foot{position:absolute;left:0;right:0;bottom:0;padding:12px 16px 18px;background:linear-gradient(to top,var(--bg) 70%,rgba(244,246,248,0));display:flex;flex-direction:column;gap:10px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+  /* Stock in form */
+  .qty{margin:0 16px 10px;background:#fff;border-radius:16px;padding:10px 14px;display:flex;align-items:baseline;justify-content:space-between}
+  .qty small{font-size:15px;color:var(--muted);font-weight:600}
+  .qty b{font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+  .qty .unit{font-size:18px;color:var(--muted);font-weight:600}
+  .units{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 16px 10px}
+  .units button{height:44px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font:600 15px Hind;color:var(--muted);cursor:pointer}
+  .units button.on{background:var(--t-warning);border-color:var(--warning);color:var(--text)}
+  .picker{margin:0 16px 10px;background:#fff;border-radius:16px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+  .picker .pl{flex:1}
+  .picker small{display:block;font-size:14px;color:var(--muted)}
+  .picker b{font-size:18px}
+  .picker a{font-size:15px;color:var(--primary);font-weight:700}
+  .cam{margin:0 16px 10px;height:48px;border-radius:14px;border:1.5px dashed #94A3B8;background:#fff;color:var(--primary);font:600 16px Hind;display:flex;align-items:center;justify-content:center;gap:8px}
+  .cam svg{width:22px;height:22px}
+  .keys{margin:0 16px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .keys button{height:50px;border-radius:14px;border:0;background:#fff;font:600 24px Hind;color:var(--text);cursor:pointer}
+  .keys button.fn{color:var(--muted);font-size:18px}
+  .keys button:active{background:var(--t-primary)}
+
+  /* Saved */
+  .done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:0 24px 140px;text-align:center}
+  .tick{width:96px;height:96px;border-radius:50%;background:var(--success);color:#fff;display:grid;place-items:center;box-shadow:0 0 0 8px var(--t-success)}
+  .tick svg{width:46px;height:46px;stroke-width:2.6}
+  .done h2{font-size:26px;margin:4px 0 0}
+  .done p{font-size:17px;color:var(--muted);margin:0;line-height:1.45}
+  .sumcard{background:#fff;border-radius:16px;padding:12px 14px;width:100%;text-align:left;margin-top:6px}
+  .sumcard div{display:flex;justify-content:space-between;font-size:16px;padding:6px 0;border-bottom:1px solid var(--line)}
+  .sumcard div:last-child{border-bottom:0}
+  .sumcard b{font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M3 7.5L12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5l9 4.5 9-4.5M12 12v9"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-cloudoff" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M7 18h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 9.5 4.5 4.5 0 0 0 7 18z"/></symbol>
+    <symbol id="i-sync" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5l2 2M20 4v5h-5M20 12a8 8 0 0 1-14 5l-2-2M4 20v-5h5"/></symbol>
+    <symbol id="i-cam" viewBox="0 0 24 24"><path d="M3 8.2a1.5 1.5 0 0 1 1.5-1.5h3.2l1.8-2.7h5l1.8 2.7h3.2A1.5 1.5 0 0 1 21 8.2v10.3a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/><circle cx="12" cy="13.2" r="3.6"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.2" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5L2.5 20h19z"/><path d="M12 10v4.5M12 17.5v.01"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
+    <symbol id="i-del" viewBox="0 0 24 24"><path d="M21 6H9l-6 6 6 6h12a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1z"/><path d="M14 10l-4 4M10 10l4 4"/></symbol>
+  </defs>
+</svg>
+
+<div class="bar">
+  <button data-tab="list" class="active">1 Stock list</button>
+  <button data-tab="in">2 Stock in</button>
+  <button data-tab="saved">3 Saved</button>
+</div>
+<div class="note">Materials for Sector 21. Tap the buttons to move between screens. On the stock-in screen, tap the keys to enter a quantity.</div>
+
+<div class="phone">
+
+  <!-- 1. STOCK LIST -->
+  <section class="screen on" id="list">
+    <div class="top">
+      <button class="iconbtn" aria-label="Back" data-go="list" style="visibility:hidden"><svg><use href="#i-back"/></svg></button>
+      <div><h1>Materials</h1><small>Sector 21 · today 19/10/2026</small></div>
+    </div>
+    <div class="statusrow">
+      <span class="site">Sector 21 ▾</span>
+      <span class="chip c-off"><svg><use href="#i-cloudoff"/></svg>Saved on phone · 2</span>
+    </div>
+
+    <div class="scroll">
+      <div class="label">Low or out</div>
+
+      <div class="mrow">
+        <div class="mtop">
+          <span class="badge" style="background:var(--danger);box-shadow:0 0 0 5px #FEE2E2"><svg><use href="#i-box"/></svg></span>
+          <div class="mname"><b>20mm aggregate</b><small>Out of stock</small></div>
+          <div class="mqty"><b>0</b><small>tons</small></div>
+        </div>
+        <div class="track"><span style="width:0%;background:var(--danger)"></span></div>
+        <div class="mbot"><span class="pill-s p-out"><svg><use href="#i-x"/></svg>Out of stock</span><span class="owed">Owed to supplier <b>₹18,000</b></span></div>
+      </div>
+
+      <div class="mrow">
+        <div class="mtop">
+          <span class="badge"><svg><use href="#i-box"/></svg></span>
+          <div class="mname"><b>River sand</b><small>Supplier: Gupta Sand</small></div>
+          <div class="mqty"><b>4.2</b><small>tons</small></div>
+        </div>
+        <div class="track"><span style="width:25%;background:var(--warning)"></span></div>
+        <div class="mbot"><span class="pill-s p-warn"><svg><use href="#i-alert"/></svg>Low stock</span><span class="owed">Owed <b>₹9,500</b></span></div>
+      </div>
+
+      <div class="label">In stock</div>
+
+      <div class="mrow">
+        <div class="mtop">
+          <span class="badge"><svg><use href="#i-box"/></svg></span>
+          <div class="mname"><b>Cement (OPC 53)</b><small>Supplier: ABC Traders</small></div>
+          <div class="mqty"><b>180</b><small>bags</small></div>
+        </div>
+        <div class="track"><span style="width:60%;background:var(--success)"></span></div>
+        <div class="mbot"><span>Used today <b>20 bags</b></span><span class="owed">Owed <b>₹42,000</b></span></div>
+      </div>
+
+      <div class="mrow">
+        <div class="mtop">
+          <span class="badge"><svg><use href="#i-box"/></svg></span>
+          <div class="mname"><b>TMT steel 12mm</b><small>Supplier: Sharma Steel</small></div>
+          <div class="mqty"><b>850</b><small>kg</small></div>
+        </div>
+        <div class="track"><span style="width:70%;background:var(--success)"></span></div>
+        <div class="mbot"><span>Used today <b>120 kg</b></span><span>Paid</span></div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <div class="row2">
+        <button class="btn sec" data-go="list">Stock out</button>
+        <button class="btn" data-go="in"><svg><use href="#i-plus"/></svg>Stock in</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. STOCK IN -->
+  <section class="screen" id="in">
+    <div class="top">
+      <button class="iconbtn" aria-label="Back" data-go="list"><svg><use href="#i-back"/></svg></button>
+      <div><h1>Stock in</h1><small>Cement · Sector 21</small></div>
+    </div>
+
+    <div class="qty"><div><small>Quantity</small></div><div><b id="qv">50</b> <span class="unit" id="uv">bags</span></div></div>
+
+    <div class="units" data-units>
+      <button class="on">bags</button>
+      <button>kg</button>
+      <button>tons</button>
+    </div>
+
+    <div class="picker">
+      <span class="pl"><small>Supplier</small><b>ABC Traders</b></span>
+      <a href="#">Change</a>
+    </div>
+
+    <button class="cam"><svg><use href="#i-cam"/></svg>Add delivery slip photo</button>
+
+    <div class="keys" data-keys>
+      <button>1</button><button>2</button><button>3</button>
+      <button>4</button><button>5</button><button>6</button>
+      <button>7</button><button>8</button><button>9</button>
+      <button class="fn">.</button><button>0</button><button class="fn" aria-label="Delete"><svg style="width:22px;height:22px;margin:auto"><use href="#i-del"/></svg></button>
+    </div>
+
+    <div class="foot">
+      <button class="btn ok" data-go="saved"><svg><use href="#i-check"/></svg>Save stock in</button>
+    </div>
+  </section>
+
+  <!-- 3. SAVED -->
+  <section class="screen" id="saved">
+    <div class="top">
+      <button class="iconbtn" aria-label="Back" data-go="in"><svg><use href="#i-back"/></svg></button>
+      <div><h1>Saved</h1><small>Cement · Sector 21</small></div>
+    </div>
+    <div class="statusrow">
+      <span class="site">Sector 21 ▾</span>
+      <span class="chip c-busy"><svg class="spin"><use href="#i-sync"/></svg>Sending · 1</span>
+    </div>
+
+    <div class="done">
+      <span class="tick"><svg><use href="#i-check"/></svg></span>
+      <h2>Stock in saved</h2>
+      <p>Cement is now 230 bags on site.</p>
+      <div class="sumcard">
+        <div><span>Cement (OPC 53)</span><b>+50 bags</b></div>
+        <div><span>Supplier</span><b>ABC Traders</b></div>
+        <div><span>Owed to supplier</span><b>₹42,000</b></div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <div class="row2">
+        <button class="btn sec" data-go="in">Add more</button>
+        <button class="btn" data-go="list">Back to stock</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  function show(id){
+    document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
+    document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+  }
+  const qv = document.getElementById('qv');
+  let qty = '50';
+  document.addEventListener('click', e => {
+    const go = e.target.closest('[data-go]');
+    if (go) { show(go.dataset.go); return; }
+    const tab = e.target.closest('[data-tab]');
+    if (tab) { show(tab.dataset.tab); return; }
+    const unit = e.target.closest('[data-units] button');
+    if (unit) {
+      unit.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('on'));
+      unit.classList.add('on');
+      document.getElementById('uv').textContent = unit.textContent;
+      return;
+    }
+    const key = e.target.closest('[data-keys] button');
+    if (key) {
+      if (key.querySelector('use') || key.getAttribute('aria-label') === 'Delete') {
+        qty = qty.slice(0, -1) || '0';
+      } else if (key.textContent === '.') {
+        if (!qty.includes('.')) qty += '.';
+      } else {
+        qty = (qty === '0' ? '' : qty) + key.textContent;
+      }
+      qv.textContent = qty;
+    }
+  });
+</script>
+</body>
+</html>

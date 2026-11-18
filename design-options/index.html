@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ForeMan: four design options</title>
+<style>
+  :root{ --bg:#EDEBE6; --ink:#15171A; --muted:#55595F; --card:#FFFFFF; --line:#D6D2C8; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,'Segoe UI',sans-serif;padding:20px 16px 40px}
+  header{max-width:1600px;margin:0 auto 16px}
+  header h1{font-size:28px;margin:0 0 6px}
+  header p{margin:0;color:var(--muted);font-size:17px;max-width:800px;line-height:1.5}
+  .row{display:flex;gap:18px;overflow-x:auto;padding:6px 2px 16px;align-items:flex-start}
+  .col{flex:0 0 392px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px}
+  .col h2{font-size:22px;margin:0}
+  .col .sub{font-size:13px;color:var(--muted);line-height:1.4;min-height:40px}
+  .col iframe{width:364px;height:770px;border:0;border-radius:12px;background:#fff}
+  .col a{font-size:13px;color:#1D3F72;font-weight:600}
+  .hint{font-size:13px;color:var(--muted);margin:0 0 6px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ForeMan: four design directions</h1>
+  <p>Each panel is a 360px mockup you can click through: Home, Attendance, Voice listening, Voice confirm. Scroll sideways to see all four. The specs for each direction are in <code>docs/02-design-options.md</code>.</p>
+</header>
+
+<div class="row">
+  <section class="col">
+    <h2>A. Pakka Pictogram</h2>
+    <div class="sub">Icon home grid and a big mic. Built for the munshi with low literacy.</div>
+    <iframe src="option-a-pakka-pictogram.html" title="Option A mockup"></iframe>
+    <a href="option-a-pakka-pictogram.html" target="_blank" rel="noopener">Open full screen</a>
+  </section>
+
+  <section class="col">
+    <h2>B. Chai Ledger</h2>
+    <div class="sub">Bottom tabs and cream cards. Familiar to any Android user.</div>
+    <iframe src="option-b-chai-ledger.html" title="Option B mockup"></iframe>
+    <a href="option-b-chai-ledger.html" target="_blank" rel="noopener">Open full screen</a>
+  </section>
+
+  <section class="col">
+    <h2>C. Hi-Vis Site</h2>
+    <div class="sub">Yellow and black, sharp blocks, strongest in direct sun. Tap a worker tile to change its status.</div>
+    <iframe src="option-c-hi-vis-site.html" title="Option C mockup"></iframe>
+    <a href="option-c-hi-vis-site.html" target="_blank" rel="noopener">Open full screen</a>
+  </section>
+
+  <section class="col">
+    <h2>D. Khata Pro</h2>
+    <div class="sub">Drawer, KPI cards and dense tables. Built for owners with many sites. Weakest outdoors.</div>
+    <iframe src="option-d-khata-pro.html" title="Option D mockup"></iframe>
+    <a href="option-d-khata-pro.html" target="_blank" rel="noopener">Open full screen</a>
+  </section>
+
+  <section class="col">
+    <h2>A + D colours</h2>
+    <div class="sub">Option A's layout with Option D's colour palette: indigo, teal and slate on cool grey.</div>
+    <iframe src="option-a-khata-palette.html" title="Option A with Option D colours mockup"></iframe>
+    <a href="option-a-khata-palette.html" target="_blank" rel="noopener">Open full screen</a>
+  </section>
+</div>
+
+</body>
+</html>

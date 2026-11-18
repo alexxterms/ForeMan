@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Low and out of stock pill options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F6F8; --surface:#FFFFFF; --line:#DCE1E7;
+    --primary:#1E3A8A; --success:#047857; --warning:#B45309; --danger:#B91C1C;
+    --text:#0F172A; --muted:#475569;
+    --t-success:#D1FAE5; --t-primary:#DBEAFE; --t-warning:#FEF3C7; --t-neutral:#E2E8F0; --t-danger:#FEE2E2;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#D9DEE4;color:var(--text);font-family:Hind,sans-serif;padding:24px 16px 48px}
+  h1{font-size:28px;margin:0 0 4px}
+  .intro{color:var(--muted);font-size:14px;margin:0 0 20px;max-width:900px;line-height:1.5}
+  section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 auto 16px;max-width:900px}
+  section h2{font-size:22px;margin:0 0 4px}
+  section p{margin:0 0 14px;font-size:14px;color:var(--muted);line-height:1.5}
+  .row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+  .frame{width:360px;background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:10px}
+  .mrow{background:#fff;border-radius:16px;padding:12px}
+  .mtop{display:flex;align-items:center;gap:12px}
+  .badge{width:46px;height:46px;border-radius:50%;background:var(--warning);color:#fff;display:grid;place-items:center;box-shadow:0 0 0 5px var(--t-warning);flex:none}
+  .badge.red{background:var(--danger);box-shadow:0 0 0 5px var(--t-danger)}
+  .badge svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .mname{flex:1;min-width:0}
+  .mname b{display:block;font-size:19px;line-height:1.15}
+  .mname small{font-size:14px;color:var(--muted)}
+  .mqty{text-align:right;font-variant-numeric:tabular-nums}
+  .mqty b{display:block;font-size:24px;line-height:1}
+  .mqty small{font-size:14px;color:var(--muted)}
+  .track{height:8px;background:var(--t-neutral);border-radius:99px;margin:10px 0 8px;overflow:hidden}
+  .track span{display:block;height:100%;border-radius:99px}
+  .mbot{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--muted);gap:8px;min-height:28px}
+  .pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;font:700 14px Hind;white-space:nowrap;padding:5px 11px}
+  .pill svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .w-tint{background:var(--t-warning);color:var(--warning)}
+  .r-tint{background:var(--t-danger);color:var(--danger)}
+  .w-solid{background:var(--warning);color:#fff}
+  .r-solid{background:var(--danger);color:#fff}
+  .w-out{background:#fff;color:var(--warning);border:1.5px solid var(--warning)}
+  .r-out{background:#fff;color:var(--danger);border:1.5px solid var(--danger)}
+  .order{background:var(--primary);color:#fff;border:0;font:700 14px Hind;border-radius:999px;padding:6px 12px;display:inline-flex;align-items:center;gap:6px}
+  .order svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
+  .sub{font-size:13px;color:var(--muted);font-weight:600}
+  .stripe{border-left:5px solid var(--warning);padding-left:9px;border-radius:4px}
+  .stripe.red{border-left-color:var(--danger)}
+  .label-only{font-size:14px;font-weight:700}
+  .label-only.w{color:var(--warning)}
+  .label-only.r{color:var(--danger)}
+  .tag{display:inline-block;font-size:13px;font-weight:700;padding:3px 8px;border-radius:6px}
+  .tag.w{background:var(--t-warning);color:var(--warning)}
+  .tag.r{background:var(--t-danger);color:var(--danger)}
+  .rec{font-size:14px;color:var(--text);margin:0;line-height:1.5}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5L2.5 20h19z"/><path d="M12 10v4.5M12 17.5v.01"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M3 7.5L12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5l9 4.5 9-4.5M12 12v9"/></symbol>
+  </defs>
+</svg>
+
+<h1>Low and out of stock: pill options</h1>
+<p class="intro">Each option shows two rows from the materials list: one out of stock (aggregate, 0 tons) and one low (river sand, 4.2 tons). The stock bar and quantity stay the same in every option, so only the status marking changes.</p>
+
+<section>
+  <h2>1. Tinted pill with icon and word (recommended)</h2>
+  <p>A tinted pill with a warning or stop icon and a short word. Colour, shape and words all carry the status, so it still reads in full sun. The warning icon is a triangle, the out icon is a circle with a cross.</p>
+  <div class="frame">
+    <div class="mrow">
+      <div class="mtop"><span class="badge red"><svg><use href="#i-box"/></svg></span><div class="mname"><b>20mm aggregate</b><small>Supplier: Gupta Sand</small></div><div class="mqty"><b>0</b><small>tons</small></div></div>
+      <div class="track"><span style="width:0%;background:var(--danger)"></span></div>
+      <div class="mbot"><span class="pill r-tint"><svg><use href="#i-x"/></svg>Out of stock</span></div>
+    </div>
+    <div class="mrow">
+      <div class="mtop"><span class="badge"><svg><use href="#i-box"/></svg></span><div class="mname"><b>River sand</b><small>Supplier: Gupta Sand</small></div><div class="mqty"><b>4.2</b><small>tons</small></div></div>
+      <div class="track"><span style="width:25%;background:var(--warning)"></span></div>
+      <div class="mbot"><span class="pill w-tint"><svg><use href="#i-alert"/></svg>Low stock</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>2. Solid pill</h2>
+  <p>Filled with the status colour and white text. The strongest signal, easiest to spot from a distance. Heavier on the screen, and with several low items it can look like a row of alarms.</p>
+  <div class="frame">
+    <div class="mrow">
+      <div class="mtop"><span class="badge red"><svg><use href="#i-box"/></svg></span><div class="mname"><b>20mm aggregate</b><small>Supplier: Gupta Sand</small></div><div class="mqty"><b>0</b><small>tons</small></div></div>
+      <div class="track"><span style="width:0%;background:var(--danger)"></span></div>
+      <div class="mbot"><span class="pill r-solid">Out of stock</span></div>
+    </div>
+    <div class="mrow">
+      <div class="mtop"><span class="badge"><svg><use href="#i-box"/></svg></span><div class="mname"><b>River sand</b><small>Supplier: Gupta Sand</small></div><div class="mqty"><b>4.2</b><small>tons</small></div></div>
+      <div class="track"><span style="width:25%;background:var(--warning)"></span></div>
+      <div class="mbot"><span class="pill w-solid">Low stock</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>3. Outlined pill</h2>
+  <p>White pill with a coloured border and coloured text. Quieter than the tinted pill, and lighter on the screen. Less contrast from a distance, so it works best when only one or two rows are flagged.</p>
+  <div class="frame">
+    <div class="mrow">
+      <div class="mtop"><span class="badge red"><svg><use href="#i-box"/></svg></span><div class="mname"><b>20mm aggregate</b><small>Supplier: Gupta Sand</small></div><div class="mqty"><b>0</b><small>tons</small></div></div>
+      <div class="track"><span style="width:0%;background:var(--danger)"></span></div>
+      <div class="mbot"><span class="pill r-out">Out of stock</span></div>
+    </div>
+    <div class="mrow">
+      <div class="mtop"><span class="badge"><svg><use href="#i-box"/></svg></span><div class="mname"><b>River sand</b><small>Supplier: Gupta Sand</small></div><div class="mqty"><b>4.2</b><small>tons</small></div></div>
+      <div class="track"><span style="width:25%;background:var(--warning)"></span></div>
+      <div class="mbot"><span class="pill w-out">Low stock</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>4. Pill with the action built in</h2>
+  <p>The pill says what to do, not just the status. "Order 40 bags" for low stock, "Order now" for out. Tapping it starts a purchase. This takes one tap from problem to action, which suits a munshi who has to order.</p>
+  <div class="frame">
+    <div class="mrow">
+      <div class="mtop"><span class="badge red"><svg><use href="#i-box"/></svg></span><div class="mname"><b>20mm aggregate</b><small>Supplier: Gupta Sand</small></div><div class="mqty"><b>0</b><small>tons</small></div></div>
+      <div class="track"><span style="width:0%;background:var(--danger)"></span></div>
+      <div class="mbot"><span class="pill r-tint"><svg><use href="#i-x"/></svg>Out</span><button class="order"><svg><use href="#i-plus"/></svg>Order now</button></div>
+    </div>
+    <div class="mrow">
+      <div class="mtop"><span class="badge"><svg><use href="#i-box"/></svg></span><div class="mname"><b>River sand</b><small>Supplier: Gupta Sand</small></div><div class="mqty"><b>4.2</b><small>tons</small></div></div>
+      <div class="track"><span style="width:25%;background:var(--warning)"></span></div>
+      <div class="mbot"><span class="pill w-tint"><svg><use href="#i-alert"/></svg>Low</span><button class="order"><svg><use href="#i-plus"/></svg>Order 4 tons</button></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>5. Left stripe, text label only</h2>
+  <p>No pill. A coloured stripe runs down the left edge of the row and the status is a plain coloured word under the name. Cleanest on the screen, but the word is small and the stripe is easy to miss in sun.</p>
+  <div class="frame">
+    <div class="mrow stripe red">
+      <div class="mtop"><span class="badge red"><svg><use href="#i-box"/></svg></span><div class="mname"><b>20mm aggregate</b><small class="label-only r">Out of stock</small></div><div class="mqty"><b>0</b><small>tons</small></div></div>
+      <div class="track"><span style="width:0%;background:var(--danger)"></span></div>
+    </div>
+    <div class="mrow stripe">
+      <div class="mtop"><span class="badge"><svg><use href="#i-box"/></svg></span><div class="mname"><b>River sand</b><small class="label-only w">Low stock</small></div><div class="mqty"><b>4.2</b><small>tons</small></div></div>
+      <div class="track"><span style="width:25%;background:var(--warning)"></span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>6. Quantity against the minimum</h2>
+  <p>No status word at all. The bar shows the minimum level as a marker, and the text reads "2 tons below minimum of 6". The status is a number, so no one has to learn a label. Clear for people who read numbers well, less clear for others.</p>
+  <div class="frame">
+    <div class="mrow">
+      <div class="mtop"><span class="badge red"><svg><use href="#i-box"/></svg></span><div class="mname"><b>20mm aggregate</b><small>Minimum 5 tons</small></div><div class="mqty"><b>0</b><small>tons</small></div></div>
+      <div class="track"><span style="width:0%;background:var(--danger)"></span></div>
+      <div class="mbot"><span class="tag r">5 tons below minimum</span></div>
+    </div>
+    <div class="mrow">
+      <div class="mtop"><span class="badge"><svg><use href="#i-box"/></svg></span><div class="mname"><b>River sand</b><small>Minimum 6 tons</small></div><div class="mqty"><b>4.2</b><small>tons</small></div></div>
+      <div class="track"><span style="width:25%;background:var(--warning)"></span></div>
+      <div class="mbot"><span class="tag w">1.8 tons below minimum</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Recommendation</h2>
+  <p class="rec"><strong>Option 1, with the order action from option 4 added later once purchasing is designed.</strong> It uses three signals (colour, icon, word) so nobody depends on one, and the warning and stop icons are standard enough to read without a label. Option 4 fits best once the bills and purchase screens exist, so the button has somewhere to go.</p>
+</section>
+
+</body>
+</html>

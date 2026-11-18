@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Missed call options</title>
+<style>
+  :root{--bg:#F4F6F8;--surface:#FFFFFF;--text:#0F172A;--muted:#475569;--line:#DCE1E7;--primary:#1E3A8A;--success:#047857;--danger:#B91C1C;--warning:#B45309;--amber-t:#FEF3C7;--blue-t:#DBEAFE;--green-t:#D1FAE5}
+  *{box-sizing:border-box}
+  body{margin:0;background:#D9DEE4;color:var(--text);font-family:'Noto Sans',system-ui,sans-serif;padding:24px 16px 48px}
+  h1{font-size:21px;margin:0 0 4px}
+  .intro{color:var(--muted);font-size:14px;margin:0 0 20px;max-width:900px;line-height:1.5}
+  section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 auto 16px;max-width:900px}
+  section h2{font-size:16px;margin:0 0 4px}
+  section p{margin:0 0 14px;font-size:13px;color:var(--muted);line-height:1.5}
+  .row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+  .frame{width:360px;height:440px;background:var(--bg);border:1px solid var(--line);border-radius:18px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+  .head{padding:14px 16px 8px}
+  .head h4{margin:0;font-size:20px}
+  .head small{font-size:13px;color:var(--muted)}
+  .list{padding:0 14px;display:flex;flex-direction:column;gap:8px;flex:1;overflow:hidden}
+  .w{background:#fff;border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:10px;font-size:15px}
+  .w b{font-size:16px}
+  .w small{display:block;font-size:12px;color:var(--muted)}
+  .segs{margin-left:auto;display:flex;gap:4px}
+  .segs span{font-size:12px;font-weight:700;padding:6px 9px;border-radius:9px;border:1px solid var(--line);color:var(--muted);background:#fff}
+  .segs span.on{background:var(--success);border-color:var(--success);color:#fff}
+  .segs span.on.h{background:var(--warning);border-color:var(--warning)}
+  .segs span.on.a{background:var(--danger);border-color:var(--danger)}
+  .mc{background:var(--amber-t);border:1.5px solid #F3C978;border-radius:14px;padding:10px 12px;font-size:14px}
+  .mc b{display:block;font-size:15px}
+  .mc small{font-size:12px;color:var(--muted)}
+  .mc .btns{display:flex;gap:6px;margin-top:8px}
+  .mc .btns span{flex:1;text-align:center;font-size:13px;font-weight:700;padding:7px 0;border-radius:9px;background:#fff;border:1px solid var(--line)}
+  .mc .btns span.yes{background:var(--primary);color:#fff;border-color:var(--primary)}
+  .tabs{display:flex;padding:0 16px;border-bottom:1px solid var(--line);margin-top:4px}
+  .tabs span{padding:10px 4px;margin-right:16px;font-size:14px;font-weight:600;color:var(--muted)}
+  .tabs span.on{color:var(--primary);border-bottom:3px solid var(--primary)}
+  .badge{display:inline-block;background:var(--warning);color:#fff;border-radius:999px;font-size:11px;padding:1px 6px;margin-left:4px;vertical-align:middle}
+  .pill{display:flex;background:#EDEFF3;border-radius:12px;padding:3px;margin:0 14px 10px;gap:3px}
+  .pill span{flex:1;text-align:center;font-size:13px;font-weight:600;padding:7px 0;border-radius:9px;color:var(--muted)}
+  .pill span.on{background:#fff;color:var(--text);box-shadow:0 1px 2px rgba(15,23,42,.1)}
+  .sheetbottom{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:20px 20px 0 0;padding:10px 16px 14px;box-shadow:0 -6px 18px rgba(15,23,42,.15)}
+  .sheetbottom .grab{width:40px;height:4px;border-radius:99px;background:#CBD2DB;margin:0 auto 8px}
+  .sheetbottom h5{margin:0 0 6px;font-size:16px}
+  .strip{position:absolute;left:0;right:0;bottom:0;background:var(--amber-t);border-top:1px solid #F3C978;padding:10px 14px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--warning)}
+  .strip b{margin-left:auto;background:var(--primary);color:#fff;border-radius:8px;padding:6px 10px;font-size:12px}
+  .pros{font-size:13px;color:var(--muted);margin:10px 0 0;line-height:1.5}
+  .pros strong{color:var(--text)}
+  .pick{display:inline-block;font-size:12px;font-weight:700;color:var(--success);background:var(--green-t);border-radius:999px;padding:2px 8px;margin-left:6px}
+</style>
+</head>
+<body>
+
+<h1>Missed call tab: options</h1>
+<p class="intro">Where missed calls from workers show up, and how they get confirmed. Each option is shown on the attendance screen with the new text-only status buttons. A missed call never marks someone present on its own. The supervisor always taps to confirm.</p>
+
+<section>
+  <h2>A. Dedicated tab with a count</h2>
+  <p>Two tabs at the top of attendance: Crew and Missed calls. The badge shows how many are waiting. Clearest separation, one extra tap to reach them.</p>
+  <div class="row">
+    <div class="frame">
+      <div class="head"><h4>Attendance</h4><small>Mason crew · Sector 21</small></div>
+      <div class="tabs"><span class="on">Crew</span><span>Missed calls<span class="badge">1</span></span></div>
+      <div class="list" style="padding-top:10px">
+        <div class="w"><div><b>Ramesh Kumar</b><small>Mason</small></div><div class="segs"><span class="on">Present</span><span>Half</span><span>Absent</span></div></div>
+        <div class="w"><div><b>Sunil</b><small>Helper</small></div><div class="segs"><span class="on">Present</span><span>Half</span><span>Absent</span></div></div>
+        <div class="w"><div><b>Mohan</b><small>Bar bender</small></div><div class="segs"><span>Present</span><span class="on h">Half</span><span>Absent</span></div></div>
+      </div>
+    </div>
+    <div class="frame">
+      <div class="head"><h4>Attendance</h4><small>Mason crew · Sector 21</small></div>
+      <div class="tabs"><span>Crew</span><span class="on">Missed calls<span class="badge">1</span></span></div>
+      <div class="list" style="padding-top:10px">
+        <div class="mc"><b>Ramesh Kumar called</b><small>9:12 AM · from his registered number</small><div class="btns"><span class="yes">Mark present</span><span>Not him</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>B. Segmented switch under the date</h2>
+  <p>A pill switch that sits in place of a tab bar, with the same two views. Lighter than tabs, and it reads as one screen with two modes.</p>
+  <div class="row">
+    <div class="frame">
+      <div class="head"><h4>Attendance</h4><small>Today · Sector 21</small></div>
+      <div class="pill"><span class="on">Crew</span><span>Missed calls (1)</span></div>
+      <div class="list">
+        <div class="w"><div><b>Ramesh Kumar</b><small>Mason</small></div><div class="segs"><span class="on">Present</span><span>Half</span><span>Absent</span></div></div>
+        <div class="w"><div><b>Sunil</b><small>Helper</small></div><div class="segs"><span class="on">Present</span><span>Half</span><span>Absent</span></div></div>
+      </div>
+    </div>
+    <div class="frame">
+      <div class="head"><h4>Attendance</h4><small>Today · Sector 21</small></div>
+      <div class="pill"><span>Crew</span><span class="on">Missed calls (1)</span></div>
+      <div class="list">
+        <div class="mc"><b>Unknown number</b><small>9:12 AM · not in your crew list</small><div class="btns"><span class="yes">Pick worker</span><span>Ignore</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>C. Inline section above the crew, no tab</h2>
+  <p>Missed calls sit at the top of the list as a card, collapsed to one line when there are none. Nothing to switch to, and the card is hard to miss.</p>
+  <div class="row">
+    <div class="frame">
+      <div class="head"><h4>Attendance</h4><small>Mason crew · Sector 21</small></div>
+      <div class="list">
+        <div class="mc"><b>1 missed call to confirm</b><small>Ramesh Kumar · 9:12 AM</small><div class="btns"><span class="yes">Mark present</span><span>Not him</span></div></div>
+        <div class="w"><div><b>Sunil</b><small>Helper</small></div><div class="segs"><span class="on">Present</span><span>Half</span><span>Absent</span></div></div>
+        <div class="w"><div><b>Mohan</b><small>Bar bender</small></div><div class="segs"><span>Present</span><span class="on h">Half</span><span>Absent</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>D. Bottom sheet that opens from a strip</h2>
+  <p>A thin strip at the bottom says "1 missed call to confirm". Tapping it opens a sheet. The crew list stays clean and full height.</p>
+  <div class="row">
+    <div class="frame">
+      <div class="head"><h4>Attendance</h4><small>Mason crew · Sector 21</small></div>
+      <div class="list">
+        <div class="w"><div><b>Ramesh Kumar</b><small>Mason</small></div><div class="segs"><span class="on">Present</span><span>Half</span><span>Absent</span></div></div>
+        <div class="w"><div><b>Sunil</b><small>Helper</small></div><div class="segs"><span class="on">Present</span><span>Half</span><span>Absent</span></div></div>
+      </div>
+      <div class="strip">Missed call from Ramesh · 9:12 AM<b>Review</b></div>
+    </div>
+    <div class="frame">
+      <div class="head"><h4>Attendance</h4><small>Mason crew · Sector 21</small></div>
+      <div class="list"></div>
+      <div class="sheetbottom"><div class="grab"></div><h5>Missed calls · 1</h5><div class="mc"><b>Ramesh Kumar</b><small>9:12 AM · his registered number</small><div class="btns"><span class="yes">Mark present</span><span>Not him</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>E. Shown on the worker's own row</h2>
+  <p>No tab, no banner. When a registered worker calls, their row gets a small "Called 9:12 AM" line with a one-tap Present. Unknown numbers go to a short list at the bottom. Fewest screens, and the call sits next to the person it is about.</p>
+  <div class="row">
+    <div class="frame">
+      <div class="head"><h4>Attendance</h4><small>Mason crew · Sector 21</small></div>
+      <div class="list">
+        <div class="w" style="box-shadow:inset 3px 0 0 #B45309"><div><b>Ramesh Kumar</b><small>Mason · <span style="color:#B45309;font-weight:700">Called 9:12 AM</span></small></div><div class="segs"><span class="pick" style="margin:0;background:var(--primary);color:#fff">Present?</span></div></div>
+        <div class="w"><div><b>Sunil</b><small>Helper</small></div><div class="segs"><span class="on">Present</span><span>Half</span><span>Absent</span></div></div>
+        <div class="w"><div><b>Mohan</b><small>Bar bender</small></div><div class="segs"><span>Present</span><span class="on h">Half</span><span>Absent</span></div></div>
+      </div>
+    </div>
+  </div>
+  <p class="pros"><strong>Unknown numbers:</strong> they go to a small "Unknown callers" list at the bottom of the screen, where the supervisor picks a worker or ignores the call.</p>
+</section>
+
+<section>
+  <h2>Recommendation</h2>
+  <p class="pros"><strong>Use E, with the unknown-caller list from A.</strong> A call from a registered worker is the common case, so it should cost one tap, next to that worker's name. A separate tab makes the munshi hunt for it. Unknown numbers are rare and need a bit more thought, so they get their own short list. Two things to confirm: whether workers' numbers are stored (this is personal data under the DPDP Act), and whether the telephony provider passes the caller number reliably.</p>
+</section>
+</body>
+</html>

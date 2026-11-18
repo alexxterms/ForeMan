@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bills screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F6F8; --surface:#FFFFFF; --line:#DCE1E7;
+    --primary:#1E3A8A; --secondary:#0E7490;
+    --success:#047857; --warning:#B45309; --danger:#B91C1C;
+    --text:#0F172A; --muted:#475569;
+    --t-success:#D1FAE5; --t-primary:#DBEAFE; --t-warning:#FEF3C7; --t-neutral:#E2E8F0; --t-danger:#FEE2E2;
+    --bills:#334155;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#D9DEE4;color:var(--text);font-family:Hind,sans-serif;display:flex;flex-direction:column;align-items:center;gap:12px;padding:18px 12px}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .bar button{font:600 15px Hind;padding:8px 14px;border-radius:999px;border:1px solid #94A3B8;background:#fff;color:var(--text);cursor:pointer}
+  .bar button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+  .note{font-size:14px;color:var(--muted);max-width:420px;text-align:center}
+  .phone{width:360px;height:740px;background:var(--bg);border-radius:30px;overflow:hidden;position:relative;box-shadow:0 12px 30px rgba(15,23,42,.18)}
+  .phone[data-gst="off"] .gst-only{display:none}
+  .phone[data-gst="on"] .plain-only{display:none}
+  .screen{position:absolute;inset:0;display:none;flex-direction:column;padding-top:14px}
+  .screen.on{display:flex}
+  svg{stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;width:24px;height:24px}
+
+  .top{display:flex;align-items:center;gap:10px;padding:6px 16px 10px}
+  .top h1{font-size:26px;font-weight:700;margin:0;line-height:1.1}
+  .top small{display:block;font-size:15px;color:var(--muted);font-weight:500}
+  .iconbtn{width:52px;height:52px;border-radius:14px;border:0;background:#fff;display:grid;place-items:center;color:var(--text);flex:none;cursor:pointer}
+  .iconbtn svg{width:28px;height:28px}
+  .statusrow{display:flex;justify-content:space-between;gap:8px;padding:0 16px 10px;align-items:center}
+  .site{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:14px;font-weight:600}
+  .chip{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:7px 12px;font:700 14px Hind;white-space:nowrap}
+  .chip svg{width:18px;height:18px;stroke-width:2.2}
+  .c-ok{background:var(--t-success);color:var(--success)}
+  .c-off{background:var(--t-neutral);color:var(--muted)}
+  .scroll{flex:1;overflow-y:auto;padding:0 16px 120px}
+  .label{font-size:15px;color:var(--muted);font-weight:600;margin:12px 2px 8px}
+
+  .pill-s{display:inline-flex;align-items:center;gap:6px;border-radius:999px;font:700 14px Hind;padding:5px 11px;white-space:nowrap}
+  .pill-s svg{width:16px;height:16px;stroke-width:2.2}
+  .p-draft{background:var(--t-neutral);color:var(--muted)}
+  .p-sent{background:var(--t-primary);color:var(--primary)}
+  .p-due{background:var(--t-warning);color:var(--warning)}
+  .p-over{background:var(--t-danger);color:var(--danger)}
+  .p-paid{background:var(--t-success);color:var(--success)}
+
+  .btn{height:56px;border-radius:16px;border:0;font:600 20px Hind;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;color:#fff;background:var(--primary);cursor:pointer}
+  .btn svg{width:24px;height:24px}
+  .btn.sec{background:#fff;color:var(--primary);border:2px solid var(--primary)}
+  .btn.ok{background:var(--success)}
+  .btn:active{transform:scale(.97)}
+  .foot{position:absolute;left:0;right:0;bottom:0;padding:12px 16px 18px;background:linear-gradient(to top,var(--bg) 70%,rgba(244,246,248,0));display:flex;flex-direction:column;gap:10px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 16px 12px}
+  .seg button{height:44px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--muted);font:600 15px Hind;cursor:pointer}
+  .seg button.on{background:var(--primary);border-color:var(--primary);color:#fff}
+
+  /* Owed summary */
+  .owed{margin:0 16px 12px;background:#fff;border-radius:16px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+  .owed small{display:block;font-size:15px;color:var(--muted);font-weight:600}
+  .owed b{font-size:32px;line-height:1.05;font-variant-numeric:tabular-nums;color:var(--success)}
+  .owed .sub{font-size:14px;color:var(--muted);text-align:right}
+  .owed .sub b{font-size:20px;color:var(--danger);display:block}
+
+  /* Bill cards */
+  .bill{background:#fff;border-radius:16px;padding:12px;margin-bottom:10px}
+  .btop{display:flex;align-items:center;gap:12px}
+  .badge{width:46px;height:46px;border-radius:50%;background:var(--bills);color:#fff;display:grid;place-items:center;box-shadow:0 0 0 5px var(--t-neutral);flex:none}
+  .badge svg{width:26px;height:26px}
+  .bname{flex:1;min-width:0}
+  .bname b{display:block;font-size:19px;line-height:1.15}
+  .bname small{font-size:14px;color:var(--muted)}
+  .bamt{text-align:right;font-variant-numeric:tabular-nums}
+  .bamt b{display:block;font-size:22px;line-height:1}
+  .bbot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:14px;color:var(--muted)}
+  .share{width:44px;height:44px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--primary);display:grid;place-items:center}
+  .share svg{width:22px;height:22px}
+
+  /* New bill */
+  .company{margin:0 16px 12px;background:#fff;border-radius:16px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+  .company small{display:block;font-size:14px;color:var(--muted)}
+  .company b{font-size:18px}
+  .opt{background:#fff;border-radius:16px;padding:12px;margin:0 16px 10px;display:flex;align-items:center;gap:12px;border:2px solid transparent;cursor:pointer}
+  .opt.on{border-color:var(--primary)}
+  .opt .t{flex:1}
+  .opt b{display:block;font-size:19px}
+  .opt small{font-size:14px;color:var(--muted)}
+  .radio{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:none}
+  .opt.on .radio{border-color:var(--primary);box-shadow:inset 0 0 0 4px #fff,inset 0 0 0 12px var(--primary)}
+  .picker{margin:0 16px 10px;background:#fff;border-radius:16px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+  .picker .pl{flex:1}
+  .picker small{display:block;font-size:14px;color:var(--muted)}
+  .picker b{font-size:18px}
+  .picker a{font-size:15px;color:var(--primary);font-weight:700}
+
+  /* Lines */
+  .line{background:#fff;border-radius:16px;padding:12px;margin-bottom:10px}
+  .lt{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .lt b{font-size:18px}
+  .lt .am{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+  .lm{font-size:14px;color:var(--muted);margin-top:4px;font-variant-numeric:tabular-nums}
+  .tot{background:#fff;border-radius:16px;padding:6px 14px;margin-top:4px}
+  .tot div{display:flex;justify-content:space-between;font-size:16px;padding:8px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+  .tot div:last-child{border-bottom:0}
+  .tot .neg{color:var(--danger)}
+  .tot .grand{font-size:22px;font-weight:700;padding:12px 0 10px}
+  .tot .grand span:last-child{color:var(--text)}
+
+  /* Preview sheet */
+  .paper{background:#fff;border-radius:6px;padding:14px;box-shadow:0 2px 10px rgba(15,23,42,.12);font-size:13px;line-height:1.4}
+  .paper h3{margin:0;font-size:18px}
+  .paper .hd{display:flex;justify-content:space-between;gap:8px;padding-bottom:8px;border-bottom:2px solid var(--text);margin-bottom:8px}
+  .paper .hd small{display:block;color:var(--muted);font-size:12px}
+  .paper table{width:100%;border-collapse:collapse;margin:6px 0;font-variant-numeric:tabular-nums}
+  .paper th{text-align:right;font-size:11px;color:var(--muted);border-bottom:1px solid var(--line);padding:4px 2px}
+  .paper th:first-child,.paper td:first-child{text-align:left}
+  .paper td{text-align:right;padding:5px 2px;border-bottom:1px solid var(--line);font-size:12.5px}
+  .paper .sum{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+  .paper .sum.g{font-size:16px;font-weight:700;border-top:2px solid var(--text);margin-top:4px;padding-top:6px}
+  .qr{display:flex;gap:10px;align-items:center;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  .qr .box{width:64px;height:64px;border:2px solid var(--text);background:
+    linear-gradient(90deg,var(--text) 50%,transparent 50%) 0 0/8px 8px,
+    linear-gradient(var(--text) 50%,transparent 50%) 0 0/8px 8px;opacity:.85;flex:none}
+  .qr small{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 2.8h8.4L19 7.4v13.8a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3.8a1 1 0 0 1 1-1z"/><path d="M14.4 2.8v4.6H19"/><path d="M8.5 12h7M8.5 15.2h7M8.5 18.4h4"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="18.5" r="2.5"/><path d="M8.2 10.8l7.6-4M8.2 13.2l7.6 4"/></symbol>
+    <symbol id="i-plane" viewBox="0 0 24 24"><path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5L2.5 20h19z"/><path d="M12 10v4.5M12 17.5v.01"/></symbol>
+    <symbol id="i-cloudoff" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M7 18h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.2 9.5 4.5 4.5 0 0 0 7 18z"/></symbol>
+    <symbol id="i-tick" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  </defs>
+</svg>
+
+<div class="bar">
+  <button data-tab="list" class="active">1 Bill list</button>
+  <button data-tab="new">2 New bill</button>
+  <button data-tab="lines">3 Bill lines</button>
+  <button data-tab="preview">4 Preview</button>
+</div>
+<div class="bar">
+  <button data-gst="on" class="active">Company: GST registered</button>
+  <button data-gst="off">Company: not registered</button>
+</div>
+<div class="note">Switch the company setting above to see both bill types. Tax rates and deduction percentages are examples. Your CA confirms the real ones.</div>
+
+<div class="phone" id="phone" data-gst="on">
+
+  <!-- 1. BILL LIST -->
+  <section class="screen on" id="list">
+    <div class="top">
+      <div><h1>Bills</h1><small>All sites · 19/10/2026</small></div>
+    </div>
+    <div class="statusrow">
+      <span class="site">All sites ▾</span>
+      <span class="chip c-off"><svg><use href="#i-cloudoff"/></svg>Saved on phone · 1</span>
+    </div>
+    <div class="owed">
+      <div><small>Owed to me</small><b>₹3,63,655</b></div>
+      <div class="sub">Overdue<b>₹1,20,000</b></div>
+    </div>
+    <div class="seg" data-seg>
+      <button class="on">All</button>
+      <button>Due</button>
+      <button>Paid</button>
+    </div>
+    <div class="scroll" style="padding-top:0">
+      <div class="bill">
+        <div class="btop"><span class="badge"><svg><use href="#i-doc"/></svg></span><div class="bname"><b>Bill #4</b><small>Mr. Anil Sharma · Sector 21</small></div><div class="bamt"><b>₹2,43,655</b></div></div>
+        <div class="bbot"><span class="pill-s p-due"><svg><use href="#i-clock"/></svg>Due in 5 days</span><button class="share" aria-label="Share on WhatsApp"><svg><use href="#i-share"/></svg></button></div>
+      </div>
+      <div class="bill">
+        <div class="btop"><span class="badge"><svg><use href="#i-doc"/></svg></span><div class="bname"><b>Bill #2</b><small>Gupta Constructions · Noida 62</small></div><div class="bamt"><b>₹1,20,000</b></div></div>
+        <div class="bbot"><span class="pill-s p-over"><svg><use href="#i-alert"/></svg>Overdue 12 days</span><button class="share" aria-label="Send reminder"><svg><use href="#i-share"/></svg></button></div>
+      </div>
+      <div class="bill">
+        <div class="btop"><span class="badge"><svg><use href="#i-doc"/></svg></span><div class="bname"><b>Bill #5</b><small>Mr. Anil Sharma · Sector 21</small></div><div class="bamt"><b>₹48,000</b></div></div>
+        <div class="bbot"><span class="pill-s p-draft"><svg><use href="#i-pencil"/></svg>Draft</span><span>Not sent</span></div>
+      </div>
+      <div class="bill">
+        <div class="btop"><span class="badge"><svg><use href="#i-doc"/></svg></span><div class="bname"><b>Bill #3</b><small>Mr. Anil Sharma · Sector 21</small></div><div class="bamt"><b>₹1,85,000</b></div></div>
+        <div class="bbot"><span class="pill-s p-paid"><svg><use href="#i-check"/></svg>Paid 02/10/2026</span></div>
+      </div>
+    </div>
+    <div class="foot"><button class="btn" data-go="new"><svg><use href="#i-plus"/></svg>New bill</button></div>
+  </section>
+
+  <!-- 2. NEW BILL -->
+  <section class="screen" id="new">
+    <div class="top">
+      <button class="iconbtn" data-go="list" aria-label="Back"><svg><use href="#i-back"/></svg></button>
+      <div><h1>New bill</h1><small>Pick the bill type</small></div>
+    </div>
+    <div class="company">
+      <div style="flex:1"><small>Your company</small><b class="gst-only">GST registered</b><b class="plain-only">Not GST registered</b></div>
+      <span class="chip c-ok gst-only"><svg><use href="#i-check"/></svg>GSTIN set</span>
+      <span class="chip c-off plain-only">No tax lines</span>
+    </div>
+    <div class="scroll" style="padding:0">
+      <div class="opt on gst-only" data-opt><span class="radio"></span><div class="t"><b>Tax invoice</b><small>GSTIN, HSN/SAC, CGST + SGST or IGST</small></div></div>
+      <div class="opt on plain-only" data-opt><span class="radio"></span><div class="t"><b>Plain bill</b><small>No tax lines. Name, items, total</small></div></div>
+      <div class="opt" data-opt><span class="radio"></span><div class="t"><b>RA bill</b><small>Stage or measurement, with retention and TDS</small></div></div>
+
+      <div class="picker"><span class="pl"><small>Client</small><b>Mr. Anil Sharma</b></span><a href="#">Change</a></div>
+      <div class="picker"><span class="pl"><small>Site</small><b>Sector 21</b></span><a href="#">Change</a></div>
+    </div>
+    <div class="foot"><button class="btn" data-go="lines">Continue</button></div>
+  </section>
+
+  <!-- 3. BILL LINES -->
+  <section class="screen" id="lines">
+    <div class="top">
+      <button class="iconbtn" data-go="new" aria-label="Back"><svg><use href="#i-back"/></svg></button>
+      <div><h1>Bill #4</h1><small class="gst-only">RA bill · tax invoice</small><small class="plain-only">RA bill · plain bill</small></div>
+    </div>
+    <div class="scroll" style="padding-top:0">
+      <div class="label">Work done this bill</div>
+      <div class="line"><div class="lt"><b>Excavation</b><span class="am">₹38,400</span></div><div class="lm">120 cu m × ₹320</div></div>
+      <div class="line"><div class="lt"><b>PCC</b><span class="am">₹1,04,400</span></div><div class="lm">18 cu m × ₹5,800</div></div>
+      <div class="line"><div class="lt"><b>Brickwork</b><span class="am">₹74,750</span></div><div class="lm">65 sq m × ₹1,150</div></div>
+
+      <div class="tot">
+        <div><span>Work total</span><span>₹2,17,550</span></div>
+        <div class="gst-only"><span>GST 18%</span><span>+ ₹39,159</span></div>
+        <div class="neg"><span>Retention 5%</span><span>− ₹10,878</span></div>
+        <div class="neg"><span>TDS 1%</span><span>− ₹2,176</span></div>
+        <div class="grand"><span>You get</span><span class="gst-only">₹2,43,655</span><span class="plain-only">₹2,04,496</span></div>
+      </div>
+    </div>
+    <div class="foot"><button class="btn" data-go="preview">Preview bill</button></div>
+  </section>
+
+  <!-- 4. PREVIEW -->
+  <section class="screen" id="preview">
+    <div class="top">
+      <button class="iconbtn" data-go="lines" aria-label="Back"><svg><use href="#i-back"/></svg></button>
+      <div><h1>Preview</h1><small>This is the PDF the client gets</small></div>
+    </div>
+    <div class="scroll" style="padding-top:0">
+      <div class="paper">
+        <div class="hd">
+          <div><h3>Sharma Constructions</h3><small class="gst-only">GSTIN 06ABCDE1234F1Z5</small><small class="plain-only">Proprietor: Suresh Sharma</small></div>
+          <div style="text-align:right"><b class="gst-only">TAX INVOICE</b><b class="plain-only">BILL</b><small>No. 4 · 19/10/2026</small></div>
+        </div>
+        <div><small style="color:var(--muted)">Bill to</small><br><b>Mr. Anil Sharma</b>, Sector 21 site</div>
+        <table>
+          <tr><th>Item</th><th>Qty</th><th>Rate</th><th>Amount</th></tr>
+          <tr><td>Excavation</td><td>120</td><td>320</td><td>38,400</td></tr>
+          <tr><td>PCC</td><td>18</td><td>5,800</td><td>1,04,400</td></tr>
+          <tr><td>Brickwork</td><td>65</td><td>1,150</td><td>74,750</td></tr>
+        </table>
+        <div class="sum"><span>Work total</span><span>₹2,17,550</span></div>
+        <div class="sum gst-only"><span>CGST 9%</span><span>₹19,580</span></div>
+        <div class="sum gst-only"><span>SGST 9%</span><span>₹19,579</span></div>
+        <div class="sum"><span>Retention 5%</span><span>− ₹10,878</span></div>
+        <div class="sum"><span>TDS 1%</span><span>− ₹2,176</span></div>
+        <div class="sum g"><span>Payable</span><span class="gst-only">₹2,43,655</span><span class="plain-only">₹2,04,496</span></div>
+        <div class="qr"><span class="box"></span><div><b>Pay by UPI</b><br><small>Scan to pay sharma@upi<br>Due 24/10/2026</small></div></div>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn ok" data-go="list"><svg><use href="#i-share"/></svg>Share on WhatsApp</button>
+      <button class="btn sec" data-go="list">Save PDF</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  const phone = document.getElementById('phone');
+  function show(id){
+    document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
+    document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+  }
+  document.addEventListener('click', e => {
+    const go = e.target.closest('[data-go]');
+    if (go) { show(go.dataset.go); return; }
+    const tab = e.target.closest('[data-tab]');
+    if (tab) { show(tab.dataset.tab); return; }
+    const g = e.target.closest('[data-gst]');
+    if (g) {
+      phone.dataset.gst = g.dataset.gst;
+      document.querySelectorAll('[data-gst]').forEach(b => b.classList.toggle('active', b === g));
+      return;
+    }
+    const opt = e.target.closest('[data-opt]');
+    if (opt) {
+      document.querySelectorAll('[data-opt]').forEach(o => o.classList.remove('on'));
+      opt.classList.add('on');
+      return;
+    }
+    const seg = e.target.closest('[data-seg] button');
+    if (seg) {
+      seg.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('on'));
+      seg.classList.add('on');
+    }
+  });
+</script>
+</body>
+</html>
